@@ -7,7 +7,12 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "echarts": "^4.2.1",
+    "element-ui": "^2.4.11",
+    "good-storage": "^1.1.0",
     "vue": "^2.5.21",
+    "vue-echarts": "^4.0.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
