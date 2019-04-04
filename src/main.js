@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store' 
 
+import './registerServiceWorker'
+
 import '../public/css/reset.css'
 import '../public/css/font-awesome.css'
 import ElementUI from 'element-ui';
@@ -16,26 +18,7 @@ import 'echarts/lib/chart/pie';
 import "echarts/lib/component/polar";
 import "echarts/lib/component/tooltip"
 import "echarts/lib/component/title";
-// import 'echarts/lib/component/grid'
-// import "echarts/lib/component/graphic";
-// import "echarts/lib/component/grid";
 import "echarts/lib/component/legendScroll";
-// import "echarts/lib/component/tooltip";
-// import "echarts/lib/component/axisPointer";
-// import "echarts/lib/component/polar";
-// import "echarts/lib/component/geo";
-// import "echarts/lib/component/parallel";
-// import "echarts/lib/component/singleAxis";
-// import "echarts/lib/component/brush";
-// import "echarts/lib/component/calendar";
-// import "echarts/lib/component/title";
-// import "echarts/lib/component/dataZoom";
-// import "echarts/lib/component/visualMap";
-// import "echarts/lib/component/markPoint";
-// import "echarts/lib/component/markLine";
-// import "echarts/lib/component/markArea";
-// import "echarts/lib/component/timeline";
-// import "echarts/lib/component/toolbox";
 
 import {formatDate,numToPercent} from './util/index'
 

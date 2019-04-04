@@ -11,6 +11,7 @@
     "echarts": "^4.2.1",
     "element-ui": "^2.4.11",
     "good-storage": "^1.1.0",
+    "register-service-worker": "^1.6.2",
     "vue": "^2.5.21",
     "vue-echarts": "^4.0.1",
     "vue-router": "^3.0.1",
@@ -18,7 +19,8 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",
-    "@vue/cli-service": "^3.2.0",
+    "@vue/cli-plugin-pwa": "^3.5.1",
+    "@vue/cli-service": "^3.5.3",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.21"
