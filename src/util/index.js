@@ -64,3 +64,8 @@ export function strSimilarity2Percent(s, t) {
     var d = strSimilarity2Number(s, t);
     return (1 - d / l).toFixed(4);
 }
+
+// 产生随机字符串
+export const getRandomStr = () => {
+    return Date.now().toString() + Math.random().toString(36).substr(2, 6)
+}

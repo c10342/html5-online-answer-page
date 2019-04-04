@@ -1,6 +1,7 @@
 <template>
     <div class="my-container">
         <el-button type="primary" @click="openFile">上传试题</el-button>
+        <el-button type="success" @click="downLoadTemplate">下载试题模板</el-button>
         <input 
         type="file" 
         style="display:none" 
@@ -38,14 +39,14 @@
         @deleteItem='deleteItem'></Answer>
         <div class="mt20">
             <el-button type="primary" @click="create">创建</el-button>
-            <el-button type="success" @click="goBack">返回</el-button>
         </div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { post } from "../util/http.js";
+import { post,get } from "../util/http.js";
+import {getRandomStr} from '../util/index.js'
 export default {
   data() {
     return {
@@ -61,14 +62,12 @@ export default {
       // 判断题
       judgementQuestion: [],
       // 问答题
-      answerQuestion: [],
-      // 是否已经保存
-      isSave: false
+      answerQuestion: []
     };
   },
   methods: {
     addSingle() {
-      let id = Date.now().toString();
+      let id = getRandomStr();
       this.singleQuestion.push({
         id,
         title: "",
@@ -78,7 +77,7 @@ export default {
       });
     },
     addMultiple() {
-      let id = Date.now().toString();
+      let id = getRandomStr();
       this.multipleQuestion.push({
         id,
         title: "",
@@ -88,7 +87,7 @@ export default {
       });
     },
     addJudgement() {
-      let id = Date.now().toString();
+      let id = getRandomStr();
       this.judgementQuestion.push({
         id,
         title: "",
@@ -97,7 +96,7 @@ export default {
       });
     },
     addAnswer() {
-      let id = Date.now().toString();
+      let id = getRandomStr();
       this.answerQuestion.push({
         id,
         title: "",
@@ -241,8 +240,7 @@ export default {
               message: result.message,
               showClose: true
             });
-            this.isSave = true;
-            this.$router.back();
+            this.resetData()
           } else {
             this.$message({
               type: "warning",
@@ -308,15 +306,15 @@ export default {
         let file = e.target.files[0];
         let name = file.name;
         let reg = /(\.(xls)|(xlsx))$/i;
-        let titleName = name.replace(/(.*\/)*([^.]+).*/ig,"$2")
+        let titleName = name.replace(/(.*\/)*([^.]+).*/gi, "$2");
         if (reg.test(name)) {
           let formData = new FormData();
           formData.append("file", file);
           const result = await post("/api/upload/uploadFile", formData);
           if (result.statusCode == 200) {
             let data = result.data.question;
-            if(!this.questionTitle.name){
-              this.questionTitle.name = titleName
+            if (!this.questionTitle.name) {
+              this.questionTitle.name = titleName;
             }
             for (let key in data) {
               // Array.prototype.push.apply(this[`${key}Question`],data[key])
@@ -358,19 +356,37 @@ export default {
           showClose: true
         });
       }
+    },
+    resetData() {
+      this.questionTitle = {
+        name: "",
+        message: ""
+      };
+      this.singleQuestion = [];
+      this.multipleQuestion = [];
+      this.judgementQuestion = [];
+      this.answerQuestion = [];
+    },
+    async downLoadTemplate(){
+      try {
+        let url = '/api/downLoad/downLoadTemplate'
+        window.open(url)
+      } catch (error) {
+        this.$message({
+            showClose:true,
+            type:'error',
+            message:error.toString()
+          })
+      }
     }
   },
   computed: {
     ...mapGetters(["userInfo"])
   },
   beforeRouteLeave(to, from, next) {
-    if (this.isSave) {
-      next();
-    } else {
-      this.back(() => {
+    this.back(() => {
         next();
       });
-    }
   }
 };
 </script>

@@ -9,18 +9,22 @@
         <!-- 单选题 -->
         <Single 
         :isAnswer='isAnswer'
+        :disabled='disabled'
         :singleQuestion='singleQuestion'></Single>
         <!-- 多选题 -->
         <Multiple 
         :isAnswer='isAnswer'
+        :disabled='disabled'
         :multipleQuestion='multipleQuestion'></Multiple>
         <!-- 判断题 -->
         <Judgement 
         :isAnswer='isAnswer'
+        :disabled='disabled'
         :judgementQuestion='judgementQuestion'></Judgement>
         <!-- 简答题 -->
         <Answer 
         :isAnswer='isAnswer'
+        :disabled='disabled'
         :answerQuestion='answerQuestion'></Answer>
         <div class="mt20">
             <el-button type="success" @click="goBack">返回</el-button>
@@ -44,7 +48,8 @@ export default {
       judgementQuestion: [],
       // 问答题
       answerQuestion: [],
-      isAnswer: true
+      isAnswer: true,
+      disabled:true
     };
   },
   methods: {

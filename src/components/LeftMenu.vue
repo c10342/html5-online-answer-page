@@ -55,6 +55,11 @@ export default {
               path: "/consultQuestions",
             },
             {
+              icon:'fa-google-plus',
+              name:'发布新试题',
+              path: "/addQuestion",
+            },
+            {
               icon:'fa-file-code-o',
               name:'发布的试卷',
               path: "/publishedQuestions",

@@ -11,6 +11,7 @@
             </div>
             <div class="mt20 flex-row" :style="{'margin-left':isAnswer?'30px':'88px'}">
                 <el-input
+                    :disabled="disabled"
                     type="textarea"
                     placeholder="请输入内容"
                     v-model.trim="question.answer">
@@ -27,26 +28,30 @@
 
 <script>
 export default {
-    props:{
-        answerQuestion:{
-            type:Array,
-            default:function(){
-                return []
-            }
-        },
-        isAnswer:{
-            type:Boolean,
-            default:false
-        }
+  props: {
+    answerQuestion: {
+      type: Array,
+      default: function() {
+        return [];
+      }
     },
-    methods:{
-        deleteItem(key,index){
-            this.$emit('deleteItem',{key,index})
-        },
-        addAnswer(){
-            this.$emit('addAnswer')
-        }
+    isAnswer: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
-}
+  },
+  methods: {
+    deleteItem(key, index) {
+      this.$emit("deleteItem", { key, index });
+    },
+    addAnswer() {
+      this.$emit("addAnswer");
+    }
+  }
+};
 </script>
 

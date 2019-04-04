@@ -11,7 +11,7 @@
             </div>
             <div class="mt20 ml20">
                 <div class="mb10 flex-row" v-for="(i,option) in question.options" :key="option">
-                    <el-radio v-model.trim="question.answer" :label="option" class="mr20">{{option}}</el-radio>
+                    <el-radio :disabled="disabled" v-model.trim="question.answer" :label="option" class="mr20">{{option}}</el-radio>
                     <el-input v-if='!isAnswer' v-model.trim="question.options[option]" placeholder="请输入"></el-input>
                     <span v-if='isAnswer' class="font18">{{question.options[option]}}</span>
                 </div>
@@ -36,6 +36,10 @@ export default {
             }
         },
         isAnswer:{
+            type:Boolean,
+            default:false
+        },
+        disabled:{
             type:Boolean,
             default:false
         }

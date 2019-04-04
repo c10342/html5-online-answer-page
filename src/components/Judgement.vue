@@ -10,8 +10,8 @@
                 <span v-if='isAnswer' class="font20">{{question.title}}</span>
             </div>
             <div class="mt20 flex-row" :style="{'margin-left':isAnswer?'30px':'88px'}">
-                <el-radio v-model.trim="question.answer" label="A" class="mr20">对</el-radio>
-                <el-radio v-model.trim="question.answer" label="B" class="mr20">错</el-radio>
+                <el-radio :disabled="disabled" v-model.trim="question.answer" label="A" class="mr20">对</el-radio>
+                <el-radio :disabled="disabled" v-model.trim="question.answer" label="B" class="mr20">错</el-radio>
             </div>
             <div class="mt20 flex-row item">
                 <span style="color:red;">{{question.message}}</span>
@@ -24,26 +24,30 @@
 
 <script>
 export default {
-    props:{
-        judgementQuestion:{
-            type:Array,
-            default:function(){
-                return []
-            }
-        },
-        isAnswer:{
-            type:Boolean,
-            default:false
-        }
+  props: {
+    judgementQuestion: {
+      type: Array,
+      default: function() {
+        return [];
+      }
     },
-    methods:{
-        deleteItem(key,index){
-            this.$emit('deleteItem',{key,index})
-        },
-        addJudgement(){
-            this.$emit('addJudgement')
-        }
+    isAnswer: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
-}
+  },
+  methods: {
+    deleteItem(key, index) {
+      this.$emit("deleteItem", { key, index });
+    },
+    addJudgement() {
+      this.$emit("addJudgement");
+    }
+  }
+};
 </script>
 

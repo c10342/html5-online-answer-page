@@ -1,6 +1,6 @@
 <template>
     <div class="register">
-        <section class="form_container">
+        <section class="form_container" @keydown.enter="submitForm('registerForm')">
             <div class="manage_tip">
                 <span class="title">在线答题系统</span>
             </div>

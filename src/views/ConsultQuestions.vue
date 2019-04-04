@@ -33,7 +33,7 @@
             </div>
             <div class="flex-row flex-center ml10 mt10">
                 <el-button type="primary" @click="search">查询</el-button>
-                <el-button type="primary" @click="addQuestion">发布新试题</el-button>
+                <!-- <el-button type="primary" @click="addQuestion">发布新试题</el-button> -->
             </div>
         </div>
         <div class="mt20">
@@ -131,9 +131,9 @@ export default {
     this.getQuestionList();
   },
   methods: {
-    addQuestion() {
-      this.$router.push({ name: "addQuestion" });
-    },
+    // addQuestion() {
+    //   this.$router.push({ name: "addQuestion" });
+    // },
     async getQuestionList() {
       try {
         let params = {};

@@ -1,5 +1,6 @@
 <template>
     <div class="my-container">
+      <div class="time">时间：<span style="color:red;">{{showTime}}</span></div>
         <div>
             <div class="flex-row align-items">
                 <span class="text-nowrap mr10 font20">试题名称 :</span>
@@ -31,7 +32,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { post,get } from "../util/http.js";
+import { post, get } from "../util/http.js";
 import { strSimilarity2Percent } from "../util/index.js";
 export default {
   data() {
@@ -46,13 +47,14 @@ export default {
       judgementQuestion: [],
       // 问答题
       answerQuestion: [],
-      isAnswer: true
+      isAnswer: true,
+      time: 0
     };
   },
   methods: {
     async submit() {
       let flag = true;
-      let answer = {}
+      let answer = {};
       // 判断单选题是否已经完成
       this.singleQuestion.forEach(item => {
         let message = null;
@@ -108,12 +110,13 @@ export default {
       if (flag) {
         let params = {};
         params.title = this.title;
-        params.answer = answer
+        params.answer = answer;
         // 答题者的用户名
         params.userName = this.userInfo.name;
         // 答题者id
         params.userId = this.userInfo._id;
         params.questionId = this.$route.params.id;
+        params.answerTime = this.showTime;
         try {
           const result = await post("/api/questions/submitQuestion", params);
           if (result.statusCode == 200) {
@@ -141,76 +144,100 @@ export default {
     },
     // 返回上一级路由
     goBack() {
-      let flag = true;
-      // 判断单选题是否已经完成
-      this.singleQuestion.forEach(item => {
-        if (item.answer) {
-          flag = false;
-        }
-      });
-      // 判断多选题是否已经完成
-      this.multipleQuestion.forEach(item => {
-        if (item.answer.length != 0) {
-          flag = false;
-        }
-      });
-      // 判断判断题是否已经完成
-      this.judgementQuestion.forEach(item => {
-        if (item.answer) {
-          flag = false;
-        }
-      });
-      // 判断简答题是否已经完成
-      this.answerQuestion.forEach(item => {
-        if (item.answer) {
-          flag = false;
-        }
-      });
-      if (flag) {
-        this.$router.back();
-      } else {
-        this.openMessageBox();
-      }
+      this.$router.back()
     },
-    openMessageBox() {
-      this.$confirm("试题尚未提交,是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$router.back();
-        })
-        .catch(() => {});
+    initTime() {
+      this.timer = setInterval(() => {
+        this.time++;
+      }, 1000);
     }
   },
   async created() {
     let { id } = this.$route.params;
     try {
-          const result = await get("/api/questions/getQuestionById/"+id);
-          if (result.statusCode == 200) {
-            this.title = result.data.questionList.title;
-            this.singleQuestion = result.data.questionList.singleQuestion;
-            this.multipleQuestion = result.data.questionList.multipleQuestion;
-            this.judgementQuestion = result.data.questionList.judgementQuestion;
-            this.answerQuestion = result.data.questionList.answerQuestion;
-          } else {
-            this.$message({
-              type: "warning",
-              message: result.message,
-              showClose: true
-            });
-          }
-        } catch (error) {
-          this.$message({
-            type: "error",
-            message: error.toString(),
-            showClose: true
-          });
-        }
+      const result = await get("/api/questions/getQuestionById/" + id);
+      if (result.statusCode == 200) {
+        this.title = result.data.questionList.title;
+        this.singleQuestion = result.data.questionList.singleQuestion;
+        this.multipleQuestion = result.data.questionList.multipleQuestion;
+        this.judgementQuestion = result.data.questionList.judgementQuestion;
+        this.answerQuestion = result.data.questionList.answerQuestion;
+        this.initTime();
+      } else {
+        this.$message({
+          type: "warning",
+          message: result.message,
+          showClose: true
+        });
+      }
+    } catch (error) {
+      this.$message({
+        type: "error",
+        message: error.toString(),
+        showClose: true
+      });
+    }
+  },
+  beforeDestroy() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo"]),
+    showTime() {
+      let s = this.time % 60;
+      s = s < 10 ? `0${s}` : s;
+      let m = parseInt(this.time / 60) % 60;
+      m = m < 10 ? `0${m}` : m;
+      let h = parseInt(this.time / 60 / 60) % 24;
+      h = h < 10 ? `0${h}` : h;
+      return `${h}：${m}：${s}`;
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    let flag = true;
+    // 判断单选题是否已经完成
+    flag &&
+      this.singleQuestion.forEach(item => {
+        if (item.answer) {
+          flag = false;
+        }
+      });
+    // 判断多选题是否已经完成
+    flag &&
+      this.multipleQuestion.forEach(item => {
+        if (item.answer.length != 0) {
+          flag = false;
+        }
+      });
+    // 判断判断题是否已经完成
+    flag &&
+      this.judgementQuestion.forEach(item => {
+        if (item.answer) {
+          flag = false;
+        }
+      });
+    // 判断简答题是否已经完成
+    flag &&
+      this.answerQuestion.forEach(item => {
+        if (item.answer) {
+          flag = false;
+        }
+      });
+    if (flag) {
+      next();
+    } else {
+      this.$confirm("试卷还没提交, 是否放弃提交并退出", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          next()
+        })
+        .catch(() => {});
+    }
   }
 };
 </script>
@@ -221,6 +248,12 @@ export default {
 }
 .min-width {
   min-width: 300px;
+}
+.time {
+  position: fixed;
+  right: 50px;
+  top: 100px;
+  font-size: 20px;
 }
 </style>
 

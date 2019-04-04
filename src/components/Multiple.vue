@@ -11,7 +11,7 @@
         </div>
         <div class="mt20 ml20">
             <div class="mb10 flex-row align-items" v-for="(i,option) in question.options" :key="option">
-                <el-checkbox v-model.trim="question.answer" :label="option" class="mr20">{{option}}</el-checkbox>
+                <el-checkbox :disabled="disabled" v-model.trim="question.answer" :label="option" class="mr20">{{option}}</el-checkbox>
                 <el-input v-if='!isAnswer' v-model.trim="question.options[option]" placeholder="请输入"></el-input>
                 <span v-if='isAnswer' class="font18">{{question.options[option]}}</span>
             </div>
@@ -27,25 +27,29 @@
 
 <script>
 export default {
-    props:{
-        multipleQuestion:{
-            type:Array,
-            default:function(){
-                return []
-            }
-        },
-        isAnswer:{
-            type:Boolean,
-            default:false
-        }
+  props: {
+    multipleQuestion: {
+      type: Array,
+      default: function() {
+        return [];
+      }
     },
-    methods:{
-        deleteItem(key,index){
-            this.$emit('deleteItem',{key,index})
-        },
-        addMultiple(){
-            this.$emit('addMultiple')
-        }
+    isAnswer: {
+      type: Boolean,
+      default: false
     },
-}
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    deleteItem(key, index) {
+      this.$emit("deleteItem", { key, index });
+    },
+    addMultiple() {
+      this.$emit("addMultiple");
+    }
+  }
+};
 </script>

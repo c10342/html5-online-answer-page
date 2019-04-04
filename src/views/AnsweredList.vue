@@ -119,6 +119,11 @@
                         <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
                 </el-table-column>
+                <el-table-column
+                    prop="answerTime"
+                    align='center'
+                    label="完成时间">
+                </el-table-column>
                 <el-table-column label="操作" align='center' width="200">
                     <template slot-scope="scope">
                         <el-button
