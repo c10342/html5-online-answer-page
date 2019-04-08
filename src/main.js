@@ -7,8 +7,10 @@ import './registerServiceWorker'
 
 import '../public/css/reset.css'
 import '../public/css/font-awesome.css'
+
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
 import './base.css'
 
 import ECharts from 'vue-echarts' // 在 webpack 环境下指向 components/ECharts.vue

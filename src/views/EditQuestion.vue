@@ -239,7 +239,9 @@ export default {
         let params = {};
         params.title = this.questionTitle.name;
         params.single = {
-          question: this.singleQuestion.length
+          question: this.singleQuestion,
+          answer:singleAnswer,
+          count: this.singleQuestion.length
         };
         params.multiple = {
           question: this.multipleQuestion,
