@@ -23,6 +23,7 @@
     "@vue/cli-service": "^3.5.3",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
+    "prerender-spa-plugin": "^3.4.0",
     "vue-template-compiler": "^2.5.21"
   }
 }
