@@ -83,9 +83,6 @@ export default {
         }
       });
     },
-    a(){
-      console.log(1)
-    }
   }
 };
 </script>
@@ -100,7 +97,6 @@ export default {
 }
 .form_container {
   width: 370px;
-  /* height: 210px; */
   position: absolute;
   top: 50%;
   left: 50%;
