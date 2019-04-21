@@ -3,16 +3,23 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+// pwa
 import './registerServiceWorker'
 
+// 重置样式和字体图标
 import '../public/css/reset.css'
 import '../public/css/font-awesome.css'
 
+// element
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+Vue.use(ElementUI);
+
+// 通用基础样式
 import './base.css'
 
+// ECharts
 import ECharts from 'vue-echarts' // 在 webpack 环境下指向 components/ECharts.vue
 import "echarts/lib/chart/line";
 import 'echarts/lib/chart/bar';
@@ -22,8 +29,18 @@ import "echarts/lib/component/tooltip"
 import "echarts/lib/component/title";
 import "echarts/lib/component/legendScroll";
 
-import { formatDate, numToPercent } from './util/index'
+Vue.component('v-chart', ECharts)
 
+import {
+  formatDate,
+  numToPercent
+} from './util/index'
+
+// 过滤器
+Vue.filter('formatDate', formatDate)
+Vue.filter('numToPercent', numToPercent)
+
+// 组件
 import Bg from './components/Bg.vue'
 import Single from './components/Single'
 import Multiple from './components/Multiple'
@@ -36,14 +53,41 @@ Vue.component('Multiple', Multiple)
 Vue.component('Answer', Answer)
 Vue.component('Judgement', Judgement)
 
-Vue.component('v-chart', ECharts)
+import axios from 'axios'
 
-Vue.use(ElementUI);
+import {
+  whiteList
+} from './util/config';
+
+// 请求拦截
+axios.interceptors.request.use(function (config) {
+  let url = config.url
+  if (!whiteList.some(item => url.startsWith(item))) {
+    let token = window.sessionStorage.getItem('token') || ''
+    config.headers.token = token
+  }
+  return config;
+})
+axios.interceptors.response.use(function (config) {
+  if (config.data.statusCode == 401) {
+    window.sessionStorage.removeItem('token')
+    store.commit('setUserInfo',{})
+    router.replace({
+      name: 'login'
+    })
+  } else {
+    let token = config.headers.token
+    if (token) {
+      window.sessionStorage.setItem('token', token)
+    }
+  }
+
+  return config;
+})
+
 
 Vue.config.productionTip = false
 
-Vue.filter('formatDate', formatDate)
-Vue.filter('numToPercent', numToPercent)
 
 // 登录权限控制
 router.beforeEach((to, from, next) => {
@@ -53,7 +97,9 @@ router.beforeEach((to, from, next) => {
     if (to.name == 'login' || to.name == 'register') {
       next()
     } else {
-      next({ name: 'login' })
+      next({
+        name: 'login'
+      })
     }
   } else { //用户已经登录了
     next()
