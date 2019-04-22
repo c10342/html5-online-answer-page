@@ -6,8 +6,10 @@ import store from './store'
 // pwa
 import './registerServiceWorker'
 
-// 重置样式和字体图标
+// 重置样式
 import '../public/css/reset.css'
+
+// 字体图标
 import '../public/css/font-awesome.css'
 
 // element
