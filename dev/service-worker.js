@@ -13,6 +13,6 @@ workbox.routing.registerRoute(function(obj){
     }
     // true缓存，false不缓存，这样可以选择缓存那些请求
     return true
-},workbox.strategies.staleWhileRevalidate())
+},workbox.strategies.networkFirst())
 // workbox.strategies.cacheFirst()缓存优先
 // workbox.strategies.networkFirst()网络优先
