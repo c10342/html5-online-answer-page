@@ -14,8 +14,13 @@
                 <el-form-item>
                     <el-button type="primary"  @click="submitForm('loginForm')" class="submit_btn">登  录</el-button>
                 </el-form-item>
-                <div class="tiparea">
-                    <p>还没有账号？现在<router-link to='/register'>注册</router-link></p>
+                <div class="login-type">
+                  <div class="github">
+                      <p>使用<a :href="href">github</a>登录</p>
+                  </div>
+                  <div class="tiparea">
+                      <p>还没有账号？现在<router-link to='/register'>注册</router-link></p>
+                  </div>
                 </div>
             </el-form>
         </section>
@@ -24,7 +29,8 @@
 
 <script>
 import { mapMutations } from "vuex";
-import { post } from "../util/http.js";
+import { post, get } from "../util/http.js";
+import { clientID, redirect_uri } from "../util/config.js";
 export default {
   name: "login",
   data() {
@@ -48,6 +54,37 @@ export default {
         ]
       }
     };
+  },
+  async mounted() {
+    try {
+      const code = this.$route.query.code;
+      if (code) {
+        const userInfo = await get("/api/user/getGithubInfo", { code });
+        if (userInfo.statusCode == 200) {
+          this.$message({
+            showClose: true,
+            message: userInfo.message,
+            type: "success"
+          });
+          this.setUserInfo(userInfo.data.userInfo);
+          this.$router.push({
+            name: "home"
+          });
+        } else {
+          this.$message({
+            showClose: true,
+            message: userInfo.message,
+            type: "warning"
+          });
+        }
+      }
+    } catch (error) {
+      this.$message({
+        showClose: true,
+        message: error.toString(),
+        type: "error"
+      });
+    }
   },
   methods: {
     ...mapMutations(["setUserInfo"]),
@@ -82,7 +119,12 @@ export default {
           }
         }
       });
-    },
+    }
+  },
+  computed: {
+    href() {
+      return `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirect_uri}`;
+    }
   }
 };
 </script>
@@ -100,7 +142,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   padding: 25px;
   border-radius: 5px;
   text-align: center;
@@ -129,6 +171,21 @@ export default {
 }
 .tiparea p a {
   color: #409eff;
+}
+
+.github {
+  text-align: left;
+  font-size: 12px;
+  color: #333;
+}
+
+.github p a {
+  color: #409eff;
+}
+.login-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>
 
