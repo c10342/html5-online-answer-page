@@ -48,7 +48,8 @@ export default {
       // 问答题
       answerQuestion: [],
       isAnswer: true,
-      time: 0
+      time: 0,
+      isCanGoback:false
     };
   },
   methods: {
@@ -125,7 +126,8 @@ export default {
               message: result.message,
               showClose: true
             });
-            this.$router.back();
+            this.isCanGoback = true
+            this.$router.replace({name:'consultQuestions'});
           } else {
             this.$message({
               type: "warning",
@@ -144,7 +146,7 @@ export default {
     },
     // 返回上一级路由
     goBack() {
-      this.$router.back()
+      this.$router.push({name:'consultQuestions'});
     },
     initTime() {
       this.timer = setInterval(() => {
@@ -196,6 +198,10 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
+    if(this.isCanGoback){
+      next()
+      return
+    }
     let flag = true;
     // 判断单选题是否已经完成
     flag &&
