@@ -29,6 +29,10 @@
     font-size: 18px;
 }
 
+.el-form-item__label{
+  color: #fff;
+}
+
 
 .deleteItem{
     font-size: 18px;

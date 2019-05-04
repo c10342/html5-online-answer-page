@@ -19,6 +19,7 @@ import QuestionsStatistics from './views/QuestionsStatistics.vue'
 import StatisticsDetail from './views/StatisticsDetail.vue'
 import AnswerUserList from './views/AnswerUserList.vue'
 import NotFound from './views/NotFound.vue'
+import Mbg from './views/Bg.vue'
 
 Vue.use(Router)
 
@@ -26,11 +27,15 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [{
-      path: '/',
-      name: '/',
-      redirect: '/login'
-    },
-    {
+    path: '/',
+    name: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/bg',
+    name: 'bg',
+    component: Mbg,
+    children: [{
       path: '/login',
       name: 'login',
       component: Login
@@ -39,97 +44,99 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
-    },
-    {
-      path: '/index',
-      name: 'index',
-      component: Index,
-      children: [{
-          path: '/index',
-          redirect: '/home'
-        },
-        {
-          path: '/home',
-          name: 'home',
-          component: Home
-        },
-        {
-          path: '/updatePwd',
-          name: 'updatePwd',
-          component: UpdatePwd
-        },
-        {
-          path: '/updateName',
-          name: 'updateName',
-          component: UpdateName
-        },
-        {
-          path: '/userInfo',
-          name: 'userInfo',
-          component: UserInfo
-        },
-        {
-          path: '/consultQuestions',
-          name: 'consultQuestions',
-          component: ConsultQuestions
-        },
-        {
-          path: '/addQuestion',
-          name: 'addQuestion',
-          component: AddQuestion
-        },
-        {
-          path: '/publishedQuestions',
-          name: 'publishedQuestions',
-          component: PublishedQuestions
-        },
-        {
-          path: '/answerQuestion/:id',
-          name: 'answerQuestion',
-          component: AnswerQuestion
-        },
-        {
-          path: '/editQuestion/:id',
-          name: 'editQuestion',
-          component: EditQuestion
-        },
-        {
-          path: '/answeredList',
-          name: 'answeredList',
-          component: AnsweredList
-        },
-        {
-          path: '/answerDetail/:id',
-          name: 'answerDetail',
-          component: AnswerDetail
-        },
-        {
-          path: '/commentList/:id',
-          name: 'commentList',
-          component: CommentList
-        },
-        {
-          path: '/questionsStatistics',
-          name: 'questionsStatistics',
-          component: QuestionsStatistics
-        },
-        {
-          path: '/statisticsDetail/:id',
-          name: 'statisticsDetail',
-          component: StatisticsDetail
-        },
-        {
-          path: '/answerUserList/:id',
-          name: 'answerUserList',
-          component: AnswerUserList
-        },
-      ]
-    },
-    {
-      path:'*',
-      name:'notFound',
-      component:NotFound
     }
+    ]
+  },
+  {
+    path: '/index',
+    name: 'index',
+    component: Index,
+    children: [{
+      path: '/index',
+      redirect: '/home'
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home
+    },
+    {
+      path: '/updatePwd',
+      name: 'updatePwd',
+      component: UpdatePwd
+    },
+    {
+      path: '/updateName',
+      name: 'updateName',
+      component: UpdateName
+    },
+    {
+      path: '/userInfo',
+      name: 'userInfo',
+      component: UserInfo
+    },
+    {
+      path: '/consultQuestions',
+      name: 'consultQuestions',
+      component: ConsultQuestions
+    },
+    {
+      path: '/addQuestion',
+      name: 'addQuestion',
+      component: AddQuestion
+    },
+    {
+      path: '/publishedQuestions',
+      name: 'publishedQuestions',
+      component: PublishedQuestions
+    },
+    {
+      path: '/answerQuestion/:id',
+      name: 'answerQuestion',
+      component: AnswerQuestion
+    },
+    {
+      path: '/editQuestion/:id',
+      name: 'editQuestion',
+      component: EditQuestion
+    },
+    {
+      path: '/answeredList',
+      name: 'answeredList',
+      component: AnsweredList
+    },
+    {
+      path: '/answerDetail/:id',
+      name: 'answerDetail',
+      component: AnswerDetail
+    },
+    {
+      path: '/commentList/:id',
+      name: 'commentList',
+      component: CommentList
+    },
+    {
+      path: '/questionsStatistics',
+      name: 'questionsStatistics',
+      component: QuestionsStatistics
+    },
+    {
+      path: '/statisticsDetail/:id',
+      name: 'statisticsDetail',
+      component: StatisticsDetail
+    },
+    {
+      path: '/answerUserList/:id',
+      name: 'answerUserList',
+      component: AnswerUserList
+    },
+    ]
+  },
+  {
+    path: '*',
+    name: 'notFound',
+    component: NotFound
+  }
   ]
 })
 

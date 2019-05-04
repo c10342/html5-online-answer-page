@@ -1,37 +1,35 @@
 <template>
-    <div class="register">
-        <section class="form_container" @keydown.enter="submitForm('registerForm')">
-            <div class="manage_tip">
-                <span class="title">在线答题系统</span>
-            </div>
-            <el-form :model="registerUser" :rules="rules" class="registerForm" ref="registerForm" label-width="80px">
-                <el-form-item label="用户名" prop="name">
-                    <el-input v-model="registerUser.name" placeholder="请输入用户名"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="registerUser.email" placeholder="请输入邮箱"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="registerUser.password" placeholder="请输入密码" type="password"></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码" prop="password2">
-                    <el-input v-model="registerUser.password2" placeholder="请确认密码" type="password"></el-input>
-                </el-form-item>
-                <el-form-item label="验证码" prop="code">
-                    <div class="flex-row">
-                      <el-input v-model="registerUser.code" placeholder="请输入验证码"></el-input>
-                    <el-button :disabled="disabled" @click="getCode" type="primary" class="code_btn">{{!disabled?'获取':`${second}s`}}</el-button>
-                    </div>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary"  class="submit_btn" @click="submitForm('registerForm')">注 册</el-button>
-                </el-form-item>
-                <div class="tiparea">
-                    <p>已经有账号？现在<router-link to='/login'>登录</router-link></p>
+    <section class="form_container" @keydown.enter="submitForm('registerForm')">
+        <div class="manage_tip">
+            <span class="title">在线答题系统</span>
+        </div>
+        <el-form :model="registerUser" :rules="rules" class="registerForm" ref="registerForm" label-width="80px">
+            <el-form-item label="用户名" prop="name">
+                <el-input v-model="registerUser.name" placeholder="请输入用户名"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+                <el-input v-model="registerUser.email" placeholder="请输入邮箱"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+                <el-input v-model="registerUser.password" placeholder="请输入密码" type="password"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="password2">
+                <el-input v-model="registerUser.password2" placeholder="请确认密码" type="password"></el-input>
+            </el-form-item>
+            <el-form-item label="验证码" prop="code">
+                <div class="flex-row">
+                  <el-input v-model="registerUser.code" placeholder="请输入验证码"></el-input>
+                <el-button :disabled="disabled" @click="getCode" type="primary" class="code_btn">{{!disabled?'获取':`${second}s`}}</el-button>
                 </div>
-            </el-form>
-        </section>
-    </div>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary"  class="submit_btn" @click="submitForm('registerForm')">注 册</el-button>
+            </el-form-item>
+            <div class="tiparea">
+                <p>已经有账号？现在<router-link to='/login'>登录</router-link></p>
+            </div>
+        </el-form>
+    </section>
 </template>
 
 <script>
@@ -223,16 +221,8 @@ export default {
 
 
 <style scoped>
-.register {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: url(../assets/bg.jpg) no-repeat center center;
-  background-size: 100% 100%;
-}
 .form_container {
   width: 370px;
-  /* height: 210px; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -249,7 +239,7 @@ export default {
 }
 .registerForm {
   margin-top: 20px;
-  background-color: #fff;
+  background-color: rgba(0, 0, 0, .3);
   padding: 20px 40px 20px 20px;
   border-radius: 5px;
   box-shadow: 0px 5px 10px #cccc;
@@ -262,7 +252,7 @@ export default {
 .tiparea {
   text-align: right;
   font-size: 12px;
-  color: #333;
+  color: #fff;
 }
 .tiparea p a {
   color: #409eff;

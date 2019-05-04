@@ -5,5 +5,7 @@
 </template>
 
 <style lang="less">
-
+body{
+  background-color: #2D2D2D;
+}
 </style>
