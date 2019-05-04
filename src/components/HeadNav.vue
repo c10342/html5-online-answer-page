@@ -69,7 +69,7 @@ export default {
     // 退出登录
     async getOut() {
       try {
-        const result = await get("api/user/logout");
+        const result = await get("/api/user/logout");
         if (result.statusCode == 200) {
           storage.session.remove("userInfo");
           this.setUserInfo({});

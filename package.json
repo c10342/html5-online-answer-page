@@ -15,7 +15,8 @@
     "vue": "^2.5.21",
     "vue-echarts": "^4.0.1",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",

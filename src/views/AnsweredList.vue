@@ -155,6 +155,7 @@
 <script>
 import { get, post } from "../util/http.js";
 import { mapGetters } from "vuex";
+import Xss from 'xss'
 export default {
   data() {
     return {
@@ -240,7 +241,7 @@ export default {
         } else {
           let params = {
             userName: this.userInfo.name,
-            content: this.commentInfo,
+            content: Xss(this.commentInfo),
             questionId: this.questionId,
             userId: this.userInfo._id
           };
