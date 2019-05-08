@@ -1,28 +1,34 @@
 <template>
-      <section class="form_container" @keydown.enter="submitForm('loginForm')">
-          <div class="manage_tip">
-              <span class="title">在线答题系统</span>
-          </div>
-          <el-form :model="loginUser" :rules="rules" ref="loginForm" class="loginForm" label-width="60px">
-              <el-form-item label="邮箱" prop="email">
-                  <el-input v-model="loginUser.email" placeholder="请输入邮箱"></el-input>
-              </el-form-item>
-              <el-form-item label="密码" prop="password">
-                  <el-input v-model="loginUser.password" placeholder="请输入密码" type="password"></el-input>
-              </el-form-item>
-              <el-form-item>
-                  <el-button type="primary"  @click="submitForm('loginForm')" class="submit_btn">登  录</el-button>
-              </el-form-item>
-              <div class="login-type">
-                <div class="github">
-                    <p>使用<a :href="href">github</a>登录</p>
-                </div>
-                <div class="tiparea">
-                    <p>还没有账号？现在<router-link to='/register'>注册</router-link></p>
-                </div>
-              </div>
-          </el-form>
-      </section>
+  <section class="form_container" @keydown.enter="submitForm('loginForm')">
+    <div class="manage_tip">
+      <span class="title">在线答题系统</span>
+    </div>
+    <el-form :model="loginUser" :rules="rules" ref="loginForm" class="loginForm" label-width="60px">
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="loginUser.email" placeholder="请输入邮箱"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="loginUser.password" placeholder="请输入密码" type="password"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登 录</el-button>
+      </el-form-item>
+      <div class="login-type">
+        <div class="github">
+          <p>
+            使用
+            <a :href="href">github</a>登录
+          </p>
+        </div>
+        <div class="tiparea">
+          <p>
+            还没有账号？现在
+            <router-link to="/register">注册</router-link>
+          </p>
+        </div>
+      </div>
+    </el-form>
+  </section>
 </template>
 
 <script>
@@ -147,7 +153,7 @@ export default {
 .loginForm {
   margin-top: 20px;
   /* background-color: #fff; */
-  background-color: rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, 0.3);
   padding: 20px 40px 20px 20px;
   border-radius: 5px;
   box-shadow: 0px 5px 10px #cccc;

@@ -20,6 +20,7 @@ import StatisticsDetail from './views/StatisticsDetail.vue'
 import AnswerUserList from './views/AnswerUserList.vue'
 import NotFound from './views/NotFound.vue'
 import Mbg from './views/Bg.vue'
+import UserMessage from './views/UserMessage.vue'
 
 Vue.use(Router)
 
@@ -76,21 +77,6 @@ export default new Router({
       component: UserInfo
     },
     {
-      path: '/consultQuestions',
-      name: 'consultQuestions',
-      component: ConsultQuestions
-    },
-    {
-      path: '/addQuestion',
-      name: 'addQuestion',
-      component: AddQuestion
-    },
-    {
-      path: '/publishedQuestions',
-      name: 'publishedQuestions',
-      component: PublishedQuestions
-    },
-    {
       path: '/answerQuestion/:id',
       name: 'answerQuestion',
       component: AnswerQuestion
@@ -99,11 +85,6 @@ export default new Router({
       path: '/editQuestion/:id',
       name: 'editQuestion',
       component: EditQuestion
-    },
-    {
-      path: '/answeredList',
-      name: 'answeredList',
-      component: AnsweredList
     },
     {
       path: '/answerDetail/:id',
@@ -116,11 +97,6 @@ export default new Router({
       component: CommentList
     },
     {
-      path: '/questionsStatistics',
-      name: 'questionsStatistics',
-      component: QuestionsStatistics
-    },
-    {
       path: '/statisticsDetail/:id',
       name: 'statisticsDetail',
       component: StatisticsDetail
@@ -130,6 +106,7 @@ export default new Router({
       name: 'answerUserList',
       component: AnswerUserList
     },
+    
     ]
   },
   {
@@ -139,6 +116,43 @@ export default new Router({
   }
   ]
 })
+
+export const routes = [
+  {
+    path: '/consultQuestions',
+    name: 'consultQuestions',
+    component: ConsultQuestions,
+    type:'1-1'
+  },
+  {
+    path: '/addQuestion',
+    name: 'addQuestion',
+    component: AddQuestion,
+    type:'1-2'
+  },{
+    path: '/publishedQuestions',
+    name: 'publishedQuestions',
+    component: PublishedQuestions,
+    type:'1-3'
+  },{
+    path: '/answeredList',
+    name: 'answeredList',
+    component: AnsweredList,
+    type:'1-4'
+  },
+  {
+    path: '/questionsStatistics',
+    name: 'questionsStatistics',
+    component: QuestionsStatistics,
+    type:'2'
+  },
+  {
+    path: '/userMessage',
+    name: 'userMessage',
+    component: UserMessage,
+    type:'3'
+  },
+]
 
 // export default new Router({
 //   mode: 'history',

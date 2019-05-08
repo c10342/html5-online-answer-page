@@ -11,12 +11,28 @@
 <script>
 import HeadNav from "../components/HeadNav";
 import LeftMenu from "../components/LeftMenu";
+import { mapGetters } from "vuex";
+import { routes } from "../router.js";
 
 export default {
   name: "index",
   components: {
     HeadNav,
     LeftMenu
+  },
+  created() {
+    let jurisdiction = this.userInfo.jurisdiction;
+    let arr = [];
+    routes.forEach(element => {
+      if (jurisdiction.includes(element.type)) {
+        arr.push(element);
+      }
+    });
+    Array.prototype.push.apply(this.$router.options.routes[2].children, arr);
+    this.$router.addRoutes([this.$router.options.routes[2]]);
+  },
+  computed: {
+    ...mapGetters(["userInfo"])
   }
 };
 </script>
@@ -33,6 +49,7 @@ export default {
   width: calc(100% - 180px);
   height: calc(100% - 81px);
   overflow: auto;
+  background-color: white;
 }
 </style>
 
