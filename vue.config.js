@@ -78,9 +78,10 @@ module.exports = {
         // 自动打开浏览器
         open: true,
         host: 'localhost',
-        port: 8081,
+        port: 9092,
         https: false,
         hotOnly: false,
+        disableHostCheck: true,//Invalid Host header
         proxy: { // 配置跨域
             '/api': {
                 target: 'http://localhost:5000',
