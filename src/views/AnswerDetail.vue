@@ -8,21 +8,25 @@
         </div>
         <!-- 单选题 -->
         <Single 
+        v-if="singleQuestion.length"
         :isAnswer='isAnswer'
         :disabled='disabled'
         :singleQuestion='singleQuestion'></Single>
         <!-- 多选题 -->
         <Multiple 
+        v-if="multipleQuestion.length"
         :isAnswer='isAnswer'
         :disabled='disabled'
         :multipleQuestion='multipleQuestion'></Multiple>
         <!-- 判断题 -->
         <Judgement 
+        v-if="judgementQuestion.length"
         :isAnswer='isAnswer'
         :disabled='disabled'
         :judgementQuestion='judgementQuestion'></Judgement>
         <!-- 简答题 -->
         <Answer 
+        v-if="answerQuestion.length"
         :isAnswer='isAnswer'
         :disabled='disabled'
         :answerQuestion='answerQuestion'></Answer>
@@ -38,7 +42,7 @@ import { post, get } from "../util/http.js";
 export default {
   data() {
     return {
-      // 试题名称
+      //试卷名称
       title: "",
       // 单选题
       singleQuestion: [],

@@ -66,7 +66,7 @@ export default {
             },
             {
               icon: "fa-google-plus",
-              name: "发布新试题",
+              name: "发布新试卷",
               path: "/addQuestion",
               type: "1-2"
             },
@@ -91,10 +91,22 @@ export default {
           type: "2"
         },
         {
+          icon: "fa-comment",
+          name: "我的评论",
+          path: "/myCommentList",
+          type: "3"
+        },
+        {
+          icon: "fa-exclamation-triangle",
+          name: "我的错题",
+          path: "/myMistake",
+          type: "4"
+        },
+        {
           icon: "fa-user",
           name: "用户管理",
           path: "/userMessage",
-          type: "3"
+          type: "5"
         }
       ];
       let jurisdiction = this.userInfo._id ? this.userInfo.jurisdiction : [];

@@ -1,9 +1,20 @@
 <template>
     <div class="my-container">
-        <div>
+      <div class="mt20 flex-row align-items">
+          <h1 style="font-size:20px;">试卷类型：</h1>
+          <el-select v-model="questionType" placeholder="请选择试卷类型">
+          <el-option label="常识" value="常识"></el-option>
+          <el-option label="交通安全" value="交通安全"></el-option>
+          <el-option label="法律知识" value="法律知识"></el-option>
+          <el-option label="问卷调查" value="问卷调查"></el-option>
+          <el-option label="在线考试" value="在线考试"></el-option>
+          <el-option label="练习题" value="练习题"></el-option>
+        </el-select>
+        </div>
+        <div class="mt20">
             <div class="flex-row flex-center">
-                <span class="text-nowrap mr10 font20">试题名称 :</span>
-                <el-input v-model.trim="questionTitle.name" clearable placeholder="请输入试题名称"></el-input>
+                <span class="text-nowrap mr10 font20">试卷名称 :</span>
+                <el-input v-model.trim="questionTitle.name" clearable placeholder="请输入试卷名称"></el-input>
             </div>
             <div style="margin:10px 0 0 100px;">
                 <span style="color:red;">{{questionTitle.message}}</span>
@@ -30,6 +41,18 @@
         @addAnswer='addAnswer' 
         @deleteItem='deleteItem'></Answer>
         <div class="mt20">
+          <h1 style="font-size:20px;margin-bottom:20px;">可见人员：</h1>
+          <el-checkbox-group v-model="checkList">
+          <el-checkbox label="小学生"></el-checkbox>
+          <el-checkbox label="初中生"></el-checkbox>
+          <el-checkbox label="高中生"></el-checkbox>
+          <el-checkbox label="大学生"></el-checkbox>
+          <el-checkbox label="教师"></el-checkbox>
+          <el-checkbox label="游客"></el-checkbox>
+          <el-checkbox label="其他"></el-checkbox>
+        </el-checkbox-group>
+        </div>
+        <div class="mt20">
             <el-button type="primary" @click="save">保存</el-button>
             <el-button type="success" @click="goBack">返回</el-button>
         </div>
@@ -42,7 +65,7 @@ import { post, get } from "../util/http.js";
 export default {
   data() {
     return {
-      // 试题名称
+      // 试卷名称
       questionTitle: {
         name: "",
         message: ""
@@ -59,7 +82,9 @@ export default {
       // 判断是否已经被修改过
       isEdit: false,
       // 是否已经保存
-      isSave: false
+      isSave: false,
+      questionType:[],
+      checkList:[]
     };
   },
   created() {
@@ -78,6 +103,8 @@ export default {
           this.multipleQuestion = result.data.questionDetail.multiple;
           this.judgementQuestion = result.data.questionDetail.judgement;
           this.answerQuestion = result.data.questionDetail.answer;
+          this.checkList = JSON.parse(result.data.questionDetail.checkList)
+          this.questionType = result.data.questionDetail.questionType
         } else {
           this.$message({
             showClose: true,
@@ -144,7 +171,7 @@ export default {
       ) {
         this.$message({
           showClose: true,
-          message: "试卷至少要有一道试题",
+          message: "试卷至少要有一道试卷",
           type: "warning"
         });
         return;
@@ -230,7 +257,7 @@ export default {
       });
 
       if (!this.questionTitle.name) {
-        this.questionTitle.message = "试题名称不能为空";
+        this.questionTitle.message = "试卷名称不能为空";
         flag = false;
       } else {
         this.questionTitle.message = "";
@@ -265,6 +292,14 @@ export default {
         // 试卷id
         params._id = this.$route.params.id;
 
+        if(this.checkList.includes('管理员')){
+          params.checkList = JSON.stringify(this.checkList)
+        }else{
+          params.checkList = JSON.stringify([...this.checkList,'管理员'])
+        }
+
+        params.questionType = this.questionType
+
         try {
           const result = await post("/api/questions/editQuestion", params);
           if (result.statusCode == 200) {
@@ -292,7 +327,7 @@ export default {
       } else {
         this.$message({
           type: "warning",
-          message: "请完善试题信息",
+          message: "请完善试卷信息",
           showClose: true
         });
       }

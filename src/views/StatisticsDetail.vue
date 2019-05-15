@@ -1,17 +1,17 @@
 <template>
     <div class="my-container">
         <el-dialog
-            title="饼状图"
+            title="图表分析"
             :visible.sync="dialogVisible">
             <div>
-                <v-chart :options="polar"/>
+                <div id="echarts" style="width: 600px;height:500px;margin:0 auto;"></div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
-        <div>
+        <div v-if="single.length">
             <h3>单选题</h3>
             <el-table
                 :data="single"
@@ -22,6 +22,7 @@
                 </el-table-column>
                 <el-table-column
                     align='center'
+                    :show-overflow-tooltip='true'
                     prop="title"
                     label="试题名称">
                 </el-table-column>
@@ -80,7 +81,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="mt20">
+        <div class="mt20" v-if="multiple.length">
             <h3>多选题</h3>
             <el-table
                 :data="multiple"
@@ -92,6 +93,7 @@
                 <el-table-column
                     align='center'
                     prop="title"
+                    :show-overflow-tooltip='true'
                     label="试题名称">
                 </el-table-column>
                 <el-table-column
@@ -149,7 +151,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="mt20">
+        <div class="mt20" v-if="judgement.length">
             <h3>判断题</h3>
             <el-table
                 :data="judgement"
@@ -161,6 +163,7 @@
                 <el-table-column
                     align='center'
                     prop="title"
+                    :show-overflow-tooltip='true'
                     label="试题名称">
                 </el-table-column>
                 <el-table-column
@@ -211,7 +214,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="mt20">
+        <div class="mt20" v-if="answer.length">
             <h3>简答题</h3>
             <el-table
                 :data="answer"
@@ -223,6 +226,7 @@
                 <el-table-column
                     align='center'
                     prop="title"
+                    :show-overflow-tooltip='true'
                     label="试题名称">
                 </el-table-column>
                 <el-table-column
@@ -233,6 +237,7 @@
                  <el-table-column
                     align='center'
                     prop="correctAnswer"
+                    :show-overflow-tooltip='true'
                     label="正确答案">
                 </el-table-column>
                  <el-table-column
@@ -268,6 +273,7 @@
 
 <script>
 import { get } from "../util/http.js";
+import echarts from "echarts";
 export default {
   data() {
     return {
@@ -275,8 +281,7 @@ export default {
       judgement: [],
       multiple: [],
       single: [],
-      dialogVisible: false,
-      polar: {}
+      dialogVisible: false
     };
   },
   async created() {
@@ -308,129 +313,198 @@ export default {
       this.$router.back();
     },
     handleClick(index, row) {
-      let obj = {
-        title: {
-          text: row.title,
-          subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
-            row.totalNum
-          } 未作答人数${row.unAnswer}`,
-          x: "60%"
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c}人 ({d}%)"
-        },
-        legend: {
-          orient: "vertical",
-          left: "left",
-          data: ["A", "B", "C", "D"]
-        },
-        series: [
-          {
-            name: "选项占比",
-            type: "pie",
-            radius: "55%",
-            center: ["70%", "60%"],
-            data: [
-              { value: row.A, name: "A" },
-              { value: row.B, name: "B" },
-              { value: row.C, name: "C" },
-              { value: row.D, name: "D" }
-            ],
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            }
-          }
-        ]
-      };
-      this.polar = obj
       this.dialogVisible = true;
-    },
-    handleJudgement(index,row){
+      this.$nextTick(() => {
+        let p = echarts.init(document.getElementById("echarts"));
+        p.clear()
         let obj = {
-        title: {
-          text: row.title,
-          subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
-            row.totalNum
-          } 未作答人数${row.unAnswer}`,
-          x: "60%"
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c}人 ({d}%)"
-        },
-        legend: {
-          orient: "vertical",
-          left: "left",
-          data: ["对", "错"]
-        },
-        series: [
-          {
-            name: "选项占比",
-            type: "pie",
-            radius: "55%",
-            center: ["70%", "60%"],
-            data: [
-              { value: row.A, name: "对" },
-              { value: row.B, name: "错" },
-            ],
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
+          title: {
+            text: `试题名称：${row.title}`,
+            subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
+              row.totalNum
+            } 未作答人数${row.unAnswer}`,
+            left: "center",
+          },
+          tooltip: {
+            trigger: "item"
+          },
+          toolbox: {
+            show: true,
+            left: "right",
+            feature: {
+              dataView: { readOnly: false },
+              magicType: { type: ["line", "bar"] },
+              restore: {},
+              saveAsImage: {}
+            },
+            orient:'vertical',
+            top:'40px'
+          },
+          xAxis: {
+            type: "category",
+            data: ["A", "B", "C", "D"]
+          },
+          yAxis: {
+            type: "value"
+          },
+          series: [
+            {
+              data: [row.A, row.B, row.C, row.D],
+              type: "bar",
+              itemStyle: {
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
               }
             }
-          }
-        ]
-      };
-      this.polar = obj
-      this.dialogVisible = true;
+          ]
+        };
+        p.setOption(obj);
+      });
     },
-    handleAnswer(index,row){
+    handleJudgement(index, row) {
+      this.dialogVisible = true;
+      this.$nextTick(() => {
+        let p = echarts.init(document.getElementById("echarts"));
+        p.clear()
         let obj = {
-        title: {
-          text: row.title,
-          subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
-            row.totalNum
-          } 未作答人数${row.unAnswer}`,
-          x: "60%"
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c}人 ({d}%)"
-        },
-        legend: {
-          orient: "vertical",
-          left: "left",
-          data: ["正确", "错误"]
-        },
-        series: [
-          {
-            name: "选项占比",
-            type: "pie",
-            radius: "55%",
-            center: ["70%", "60%"],
-            data: [
-              { value: row.correctCount, name: "正确" },
-              { value: row.totalNum-row.correctCount, name: "错误" },
-            ],
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
+          title: {
+            text: `试题名称：${row.title}`,
+            subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
+              row.totalNum
+            } 未作答人数${row.unAnswer}`,
+            left: "center"
+          },
+          tooltip: {
+            trigger: "item"
+          },
+          toolbox: {
+            show: true,
+            left: "right",
+            feature: {
+              dataView: { readOnly: false },
+              magicType: { type: ["line", "bar"] },
+              restore: {},
+              saveAsImage: {}
+            },
+            orient:'vertical',
+            top:'40px'
+          },
+          xAxis: {
+            type: "category",
+            data: ["A", "B"]
+          },
+          yAxis: {
+            type: "value"
+          },
+          series: [
+            {
+              data: [row.A, row.B],
+              type: "bar",
+              itemStyle: {
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
               }
             }
-          }
-        ]
-      };
-      this.polar = obj
-      this.dialogVisible = true;
+          ]
+        };
+        p.setOption(obj);
+      });
+    },
+    handleAnswer(index, row) {
+        this.dialogVisible = true;
+      this.$nextTick(() => {
+        let p = echarts.init(document.getElementById("echarts"));
+        p.clear()
+        let obj = {
+          title: {
+            text: `试题名称：${row.title}`,
+            subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
+              row.totalNum
+            } 未作答人数${row.unAnswer}`,
+            left: "center"
+          },
+          tooltip: {
+            trigger: "item"
+          },
+          toolbox: {
+            show: true,
+            left: "right",
+            feature: {
+              dataView: { readOnly: false },
+              magicType: { type: ["line", "bar"] },
+              restore: {},
+              saveAsImage: {}
+            },
+            orient:'vertical',
+            top:'40px'
+          },
+          xAxis: {
+            type: "category",
+            data: ["正确", "错误"]
+          },
+          yAxis: {
+            type: "value"
+          },
+          series: [
+            {
+              data: [row.correctCount, row.totalNum - row.correctCount],
+              type: "bar",
+              itemStyle: {
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
+              }
+            }
+          ]
+        };
+        p.setOption(obj);
+      });
+    //   let obj = {
+    //     title: {
+    //       text: row.title,
+    //       subtext: `总人数${row.totalNum + row.unAnswer} 作答人数${
+    //         row.totalNum
+    //       } 未作答人数${row.unAnswer}`,
+    //       x: "60%"
+    //     },
+    //     tooltip: {
+    //       trigger: "item",
+    //       formatter: "{a} <br/>{b} : {c}人 ({d}%)"
+    //     },
+    //     legend: {
+    //       orient: "vertical",
+    //       left: "left",
+    //       data: ["正确", "错误"]
+    //     },
+    //     series: [
+    //       {
+    //         name: "选项占比",
+    //         type: "pie",
+    //         radius: "55%",
+    //         center: ["70%", "60%"],
+    //         data: [
+    //           { value: row.correctCount, name: "正确" },
+    //           { value: row.totalNum - row.correctCount, name: "错误" }
+    //         ],
+    //         itemStyle: {
+    //           emphasis: {
+    //             shadowBlur: 10,
+    //             shadowOffsetX: 0,
+    //             shadowColor: "rgba(0, 0, 0, 0.5)"
+    //           }
+    //         }
+    //       }
+    //     ]
+    //   };
+    //   this.dialogVisible = true;
     }
   }
 };

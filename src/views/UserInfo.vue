@@ -11,6 +11,10 @@
               <span class="w100 mr10">邮&nbsp;&nbsp;&nbsp;箱 :</span>
               <p>{{userInfo.email}}</p>
           </div>
+          <div class="flex-row font24" style="margin-top:50px;">
+              <span class="w100 mr10">身&nbsp;&nbsp;&nbsp;份 :</span>
+              <p>{{userInfo.identity}}</p>
+          </div>
         </div>
       </template>
     </bg>

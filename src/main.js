@@ -21,17 +21,17 @@ Vue.use(ElementUI);
 // 通用基础样式
 import './base.css'
 
-// ECharts
-import ECharts from 'vue-echarts' // 在 webpack 环境下指向 components/ECharts.vue
-import "echarts/lib/chart/line";
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/chart/pie';
-import "echarts/lib/component/polar";
-import "echarts/lib/component/tooltip"
-import "echarts/lib/component/title";
-import "echarts/lib/component/legendScroll";
+// // ECharts
+// import ECharts from 'vue-echarts' // 在 webpack 环境下指向 components/ECharts.vue
+// import "echarts/lib/chart/line";
+// import 'echarts/lib/chart/bar';
+// import 'echarts/lib/chart/pie';
+// import "echarts/lib/component/polar";
+// import "echarts/lib/component/tooltip"
+// import "echarts/lib/component/title";
+// import "echarts/lib/component/legendScroll";
 
-Vue.component('v-chart', ECharts)
+// Vue.component('v-chart', ECharts)
 
 import {
   formatDate,

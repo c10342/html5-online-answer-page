@@ -39,7 +39,7 @@
                 <el-table-column
                     prop="title"
                     align='center'
-                    label="试题名称">
+                    label="试卷名称">
                 </el-table-column>
                 <el-table-column
                     prop="single"

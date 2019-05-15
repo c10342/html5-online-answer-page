@@ -21,6 +21,8 @@ import AnswerUserList from './views/AnswerUserList.vue'
 import NotFound from './views/NotFound.vue'
 import Mbg from './views/Bg.vue'
 import UserMessage from './views/UserMessage.vue'
+import MyCommentList from './views/MyCommentList.vue'
+import MyMistake from './views/MyMistake.vue'
 
 Vue.use(Router)
 
@@ -147,10 +149,22 @@ export const routes = [
     type:'2'
   },
   {
+    path: '/myCommentList',
+    name: 'myCommentList',
+    component: MyCommentList,
+    type:'3'
+  },
+  {
+    path: '/myMistake',
+    name: 'myMistake',
+    component: MyMistake,
+    type:'4'
+  },
+  {
     path: '/userMessage',
     name: 'userMessage',
     component: UserMessage,
-    type:'3'
+    type:'5'
   },
 ]
 

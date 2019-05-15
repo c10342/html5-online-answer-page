@@ -69,3 +69,8 @@ export function strSimilarity2Percent(s, t) {
 export const getRandomStr = () => {
     return Date.now().toString() + Math.random().toString(36).substr(2, 6)
 }
+
+
+const identity = ['管理员','小学生','初中生','高中生','大学生','教师','游客','其他']
+
+const questionType = ['常识','交通安全','法律知识','问卷调查','在线考试','练习题']

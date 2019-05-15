@@ -22,6 +22,17 @@
                 <el-button :disabled="disabled" @click="getCode" type="primary" class="code_btn">{{!disabled?'获取':`${second}s`}}</el-button>
                 </div>
             </el-form-item>
+             <el-form-item label="身份" prop="identity">
+              <el-select v-model="registerUser.identity" placeholder="请选择身份">
+                <el-option label="小学生" value="小学生"></el-option>
+                <el-option label="初中生" value="初中生"></el-option>
+                <el-option label="高中生" value="高中生"></el-option>
+                <el-option label="大学生" value="大学生"></el-option>
+                <el-option label="教师" value="教师"></el-option>
+                <el-option label="游客" value="游客"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary"  class="submit_btn" @click="submitForm('registerForm')">注 册</el-button>
             </el-form-item>
@@ -52,8 +63,8 @@ export default {
         email: "",
         password: "",
         password2: "",
-        code: ""
-        // identity: "student"
+        code: "",
+        identity:''
       },
       disabled: false,
       second: 60,
@@ -123,6 +134,13 @@ export default {
             max: 4,
             message: "验证码长度应为4个字符",
             trigger: "blur"
+          }
+        ],
+        identity: [
+          {
+            required: true,
+            message: "身份不能为空",
+            trigger: "change"
           }
         ]
       }

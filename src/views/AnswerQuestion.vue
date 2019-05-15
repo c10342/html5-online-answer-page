@@ -3,24 +3,28 @@
       <div class="time">时间：<span style="color:red;">{{showTime}}</span></div>
         <div>
             <div class="flex-row align-items">
-                <span class="text-nowrap mr10 font20">试题名称 :</span>
+                <span class="text-nowrap mr10 font20">试卷名称 :</span>
                 <span class="font24">{{title}}</span>
             </div>
         </div>
         <!-- 单选题 -->
         <Single 
+        v-if="singleQuestion.length"
         :isAnswer='isAnswer'
         :singleQuestion='singleQuestion'></Single>
         <!-- 多选题 -->
         <Multiple 
+        v-if="multipleQuestion.length"
         :isAnswer='isAnswer'
         :multipleQuestion='multipleQuestion'></Multiple>
         <!-- 判断题 -->
         <Judgement 
+        v-if="judgementQuestion.length"
         :isAnswer='isAnswer'
         :judgementQuestion='judgementQuestion'></Judgement>
         <!-- 简答题 -->
         <Answer 
+        v-if="answerQuestion.length"
         :isAnswer='isAnswer'
         :answerQuestion='answerQuestion'></Answer>
         <div class="mt20">
@@ -37,7 +41,7 @@ import { strSimilarity2Percent } from "../util/index.js";
 export default {
   data() {
     return {
-      // 试题名称
+      // 试卷名称
       title: "",
       // 单选题
       singleQuestion: [],
@@ -49,7 +53,8 @@ export default {
       answerQuestion: [],
       isAnswer: true,
       time: 0,
-      isCanGoback:false
+      isCanGoback:false,
+      questionType:''
     };
   },
   methods: {
@@ -118,6 +123,7 @@ export default {
         params.userId = this.userInfo._id;
         params.questionId = this.$route.params.id;
         params.answerTime = this.showTime;
+        params.questionType = this.questionType;
         try {
           const result = await post("/api/questions/submitQuestion", params);
           if (result.statusCode == 200) {
@@ -164,6 +170,7 @@ export default {
         this.multipleQuestion = result.data.questionList.multipleQuestion;
         this.judgementQuestion = result.data.questionList.judgementQuestion;
         this.answerQuestion = result.data.questionList.answerQuestion;
+        this.questionType = result.data.questionList.questionType;
         this.initTime();
       } else {
         this.$message({

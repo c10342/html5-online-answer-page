@@ -1,13 +1,24 @@
 <template>
     <div class="my-container">
-        <el-button type="primary" @click="openFile">上传试题</el-button>
-        <el-button type="success" @click="downLoadTemplate">下载试题模板</el-button>
+        <el-button type="primary" @click="openFile">上传试卷</el-button>
+        <el-button type="success" @click="downLoadTemplate">下载试卷模板</el-button>
         <input 
         type="file" 
         style="display:none" 
         id="file" 
         @change="upload"
         accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        <div class="mt20 flex-row align-items">
+          <h1 style="font-size:20px;">试卷类型：</h1>
+          <el-select v-model="questionType" placeholder="请选择试卷类型">
+          <el-option label="常识" value="常识"></el-option>
+          <el-option label="交通安全" value="交通安全"></el-option>
+          <el-option label="法律知识" value="法律知识"></el-option>
+          <el-option label="问卷调查" value="问卷调查"></el-option>
+          <el-option label="在线考试" value="在线考试"></el-option>
+          <el-option label="练习题" value="练习题"></el-option>
+        </el-select>
+        </div>
         <div class="mt20">
             <div class="flex-row flex-center">
                 <span class="text-nowrap mr10 font20">试题名称 :</span>
@@ -38,6 +49,18 @@
         @addAnswer='addAnswer' 
         @deleteItem='deleteItem'></Answer>
         <div class="mt20">
+          <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
+          <el-checkbox-group v-model="checkList">
+          <el-checkbox label="小学生"></el-checkbox>
+          <el-checkbox label="初中生"></el-checkbox>
+          <el-checkbox label="高中生"></el-checkbox>
+          <el-checkbox label="大学生"></el-checkbox>
+          <el-checkbox label="教师"></el-checkbox>
+          <el-checkbox label="游客"></el-checkbox>
+          <el-checkbox label="其他"></el-checkbox>
+        </el-checkbox-group>
+        </div>
+        <div class="mt20">
             <el-button type="primary" @click="create">创建</el-button>
         </div>
     </div>
@@ -62,7 +85,9 @@ export default {
       // 判断题
       judgementQuestion: [],
       // 问答题
-      answerQuestion: []
+      answerQuestion: [],
+      checkList:['管理员','小学生','初中生','高中生','大学生','教师','游客','其他'],
+      questionType:'常识'
     };
   },
   methods: {
@@ -232,6 +257,14 @@ export default {
         // 发布者id
         params.userId = this.userInfo._id;
 
+        if(this.checkList.includes('管理员')){
+          params.checkList = JSON.stringify(this.checkList)
+        }else{
+          params.checkList = JSON.stringify([...this.checkList,'管理员'])
+        }
+
+        params.questionType = this.questionType
+
         try {
           const result = await post("/api/questions/addQuestion", params);
           if (result.statusCode == 200) {
@@ -317,7 +350,6 @@ export default {
               this.questionTitle.name = titleName;
             }
             for (let key in data) {
-              // Array.prototype.push.apply(this[`${key}Question`],data[key])
               data[key].forEach(item => {
                 this[`${key}Question`].push(item);
               });

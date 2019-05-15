@@ -91,7 +91,7 @@ export default {
               type: "1-1"
             },
             {
-              label: "发布新试题",
+              label: "发布新试卷",
               type: "1-2"
             },
             {
@@ -105,7 +105,7 @@ export default {
           ]
         },
         {
-          label: "试题统计",
+          label: "试卷统计",
           type: "2"
         }
       ],

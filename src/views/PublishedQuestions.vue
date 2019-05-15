@@ -2,12 +2,23 @@
     <div class="my-container">
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
-            <span class="text-nowrap pr10 font18">试题名称 : </span>
+            <span class="text-nowrap pr10 font18">试卷名称 : </span>
             <el-input
                 v-model="title"
-                placeholder="请输入试题名称"
+                placeholder="请输入试卷名称"
                 clearable>
             </el-input>
+            </div>
+            <div class="flex-row flex-center min-width mt10">
+            <span class="text-nowrap pr10 pl10 font18">试卷类型 : </span>
+                <el-select clearable v-model="questionType" placeholder="请选择试卷类型">
+                <el-option label="常识" value="常识"></el-option>
+                <el-option label="交通安全" value="交通安全"></el-option>
+                <el-option label="法律知识" value="法律知识"></el-option>
+                <el-option label="问卷调查" value="问卷调查"></el-option>
+                <el-option label="在线考试" value="在线考试"></el-option>
+                <el-option label="练习题" value="练习题"></el-option>
+                </el-select>
             </div>
             <div class="flex-row flex-center min-width mt10">
                 <span class="text-nowrap pr10 pl10 font18">发布时间 : </span>
@@ -38,7 +49,7 @@
                 <el-table-column
                     align='center'
                     prop="title"
-                    label="试题名称">
+                    label="试卷名称">
                 </el-table-column>
                 <el-table-column
                     align='center'
@@ -65,11 +76,11 @@
                     align='center'
                     label="总数量">
                 </el-table-column>
-                <!-- <el-table-column
-                    prop="userName"
+                <el-table-column
+                    prop="questionType"
                     align='center'
-                    label="发布者">
-                </el-table-column> -->
+                    label="试卷类型">
+                </el-table-column>
                 <el-table-column
                     align='center'
                     prop="createTime"
@@ -126,7 +137,8 @@ export default {
       title: "",
       userName: "",
       beginTime: "",
-      endTime: ""
+      endTime: "",
+      questionType:''
     };
   },
   created() {
@@ -152,6 +164,9 @@ export default {
         }
         if (this.title) {
           params.title = this.title;
+        }
+        if (this.questionType) {
+          params.questionType = this.questionType;
         }
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;
