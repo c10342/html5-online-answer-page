@@ -73,7 +73,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (config) {
   if (config.data.statusCode == 401) {
     window.sessionStorage.removeItem('token')
-    store.commit('setUserInfo',{})
+    store.commit('setUserInfo', {})
     router.replace({
       name: 'login'
     })
@@ -96,7 +96,7 @@ router.beforeEach((to, from, next) => {
   // 用户没有登录
   if (!store.state.userInfo._id) {
     // 登录注册页面不需要登录
-    if (to.name == 'login' || to.name == 'register' || to.name.startsWith('answerQuestion')) {
+    if (to.name == 'login' || to.name == 'register') {
       next()
     } else {
       next({
