@@ -1,24 +1,8 @@
 <template>
     <div class="my-container">
-        <el-dialog
-            title="评论"
-            :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
-            <div>
-                <el-input
-                v-model="commentInfo"
-                type="textarea"
-                placeholder="请输入内容"></el-input>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
-                <el-button type="primary" @click="ok">确 定</el-button>
-            </span>
-        </el-dialog>
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
-            <span class="text-nowrap pr10 font18">试卷名称 : </span>
+            <span class="text-nowrap pr10 font18">题目 : </span>
             <el-input
                 v-model="title"
                 placeholder="请输入试卷名称"
@@ -26,18 +10,16 @@
             </el-input>
             </div>
             <div class="flex-row flex-center min-width mt10">
-            <span class="text-nowrap pr10 pl10 font18">试卷类型 : </span>
-                <el-select clearable v-model="questionType" placeholder="请选择试卷类型">
-                <el-option label="常识" value="常识"></el-option>
-                <el-option label="交通安全" value="交通安全"></el-option>
-                <el-option label="法律知识" value="法律知识"></el-option>
-                <el-option label="问卷调查" value="问卷调查"></el-option>
-                <el-option label="在线考试" value="在线考试"></el-option>
-                <el-option label="练习题" value="练习题"></el-option>
+            <span class="text-nowrap pr10 pl10 font18">试题类型 : </span>
+                <el-select v-model="types" placeholder="请选择试卷类型">
+                <el-option label="单选题" :value="{label:'单选题',value:0}"></el-option>
+                <el-option label="多选题" :value="{label:'多选题',value:1}"></el-option>
+                <el-option label="判断题" :value="{label:'判断题',value:2}"></el-option>
+                <el-option label="简答题" :value="{label:'简答题',value:3}"></el-option>
                 </el-select>
             </div>
             <div class="flex-row flex-center min-width mt10">
-                <span class="text-nowrap pr10 pl10 font18">填写时间 : </span>
+                <span class="text-nowrap pr10 pl10 font18">时间 : </span>
                 <el-date-picker
                     v-model="beginTime"
                     type="date"
@@ -54,9 +36,9 @@
                 <el-button type="primary" @click="search">查询</el-button>
             </div>
         </div>
-        <div class="mt20">
+        <div class="mt20" v-if="selectTypes==0 || selectTypes==1">
             <el-table
-                :data="questionsList"
+                :data="mistakeList"
                 style="width: 100%">
                 <el-table-column
                     type="index"
@@ -65,91 +47,94 @@
                 <el-table-column
                     prop="title"
                     align='center'
-                    label="试卷名称">
+                    :show-overflow-tooltip='true'
+                    label="题目">
                 </el-table-column>
                 <el-table-column
-                    prop="single"
+                    prop="A"
                     align='center'
-                    label="单选题(对/共计)">
-                    <template slot-scope="scope">
-                        <div>{{`${scope.row.single.singleCorrect} / ${scope.row.single.singleCount}`}}</div>
-                    </template>
+                    :show-overflow-tooltip='true'
+                    label="A">
                 </el-table-column>
                 <el-table-column
-                    prop="multiple"
+                    prop="B"
                     align='center'
-                    label="多选题(对/共计)">
-                    <template slot-scope="scope">
-                        <div>{{`${scope.row.multiple.multipleCorrect} / ${scope.row.multiple.multipleCount}`}}</div>
-                    </template>
+                    :show-overflow-tooltip='true'
+                    label="B">
                 </el-table-column>
                 <el-table-column
-                    prop="judgement"
+                    prop="C"
                     align='center'
-                    label="判断题(对/共计)">
-                    <template slot-scope="scope">
-                        <div>{{`${scope.row.judgement.judgementCorrect} / ${scope.row.judgement.judgementCount}`}}</div>
-                    </template>
+                    :show-overflow-tooltip='true'
+                    label="C">
+                </el-table-column>
+                <el-table-column
+                    prop="D"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="D">
+                </el-table-column>
+                <el-table-column
+                    prop="myAnswer"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="你的答案">
                 </el-table-column>
                 <el-table-column
                     prop="answer"
                     align='center'
-                    label="简答题(对/共计)">
-                    <template slot-scope="scope">
-                        <div>{{`${scope.row.answer.answerCorrect} / ${scope.row.answer.answerCount}`}}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="correctCount"
-                    align='center'
-                    label="正确题数">
-                </el-table-column>
-                <el-table-column
-                    prop="totalCount"
-                    align='center'
-                    label="总题数">
-                </el-table-column>
-                <el-table-column
-                    prop="correctPercent"
-                    align='center'
-                    label="答对率">
-                    <template slot-scope="scope">
-                        <div>{{scope.row.correctPercent | numToPercent}}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="userName"
-                    align='center'
-                    label="发布者">
+                    :show-overflow-tooltip='true'
+                    label="正确答案">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
                     align='center'
-                    label="填写时间">
+                    :show-overflow-tooltip='true'
+                    label="时间">
                     <template slot-scope="scope">
                         <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
                 </el-table-column>
+            </el-table>
+        </div>
+        <div class="mt20" v-if="selectTypes==2 || selectTypes==3">
+            <el-table
+                :data="mistakeList"
+                style="width: 100%">
                 <el-table-column
-                    prop="answerTime"
-                    align='center'
-                    label="完成时间">
+                    type="index"
+                    width="20">
                 </el-table-column>
-                <el-table-column label="操作" align='center' width="200">
+                <el-table-column
+                    prop="title"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="题目">
+                </el-table-column>
+                <el-table-column
+                    prop="myAnswer"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="你的答案">
+                </el-table-column>
+                <el-table-column
+                    prop="answer"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="正确答案">
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="时间">
                     <template slot-scope="scope">
-                        <el-button
-                        size="small"
-                        type="success"
-                        @click="comment(scope.$index, scope.row)">评论</el-button>
-                        <el-button
-                        type="primary"
-                        size="small"
-                        @click="handleClick(scope.$index, scope.row)">查看详情</el-button>
+                        <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <div v-if="total>10" class="text-center my-pagination">
+        <div v-if="total>pageSize" class="text-center my-pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -163,13 +148,12 @@
 </template>
 
 <script>
-import { get, post } from "../util/http.js";
+import { get } from "../util/http.js";
 import { mapGetters } from "vuex";
-import Xss from 'xss'
 export default {
   data() {
     return {
-      questionsList: [],
+      mistakeList: [],
       pageSize: 10,
       currentPage: 1,
       total: 0,
@@ -177,18 +161,15 @@ export default {
       title: "",
       beginTime: "",
       endTime: "",
-      dialogVisible: false,
-      questionId: "",
-      commentInfo: "",
-      questionType:'',
-      questionTitle:''
+      types: { label: "单选题", value: 0 },
+      selectTypes:0
     };
   },
   created() {
-    this.getQuestionList();
+    this.getMistakeList();
   },
   methods: {
-    async getQuestionList() {
+    async getMistakeList() {
       try {
         let params = {};
         if (this.beginTime && this.endTime && this.beginTime > this.endTime) {
@@ -208,15 +189,41 @@ export default {
         if (this.title) {
           params.title = this.title;
         }
-        if (this.questionType) {
-          params.questionType = this.questionType;
-        }
+        params.types = this.types.value;
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;
         params.userId = this.userInfo._id;
-        const result = await get("/api/questions/getAnswerQuestion", params);
+        const result = await get("/api/questions/getMistake", params);
         if (result.statusCode == 200) {
-          this.questionsList = result.data.answerList;
+          let mistakeList = result.data.mistakeList;
+          let arr = [];
+          let val = this.types.value
+          this.selectTypes = val
+          if (val == 0 || val == 1) {
+            mistakeList.forEach(item => {
+              arr.push({
+                title: item.question.title,
+                A: item.question.options.A,
+                B: item.question.options.B,
+                C: item.question.options.C,
+                D: item.question.options.D,
+                myAnswer: item.question.answer.toString(),
+                answer: item.question.message.toString(),
+                createTime: item.createTime
+              });
+            });
+          }
+          if (val == 2 || val == 3) {
+            mistakeList.forEach(item => {
+              arr.push({
+                title: item.question.title,
+                myAnswer: item.question.answer,
+                answer: item.question.message,
+                createTime: item.createTime
+              });
+            });
+          }
+          this.mistakeList = arr
           this.total = result.data.total;
         } else {
           this.$message({
@@ -233,93 +240,14 @@ export default {
         });
       }
     },
-    handleClick(index, row) {
-      this.$router.push({ name: "answerDetail", params: {id:row.answerId} });
-    },
+
     handleCurrentChange(e) {
       this.currentPage = e;
-      this.getQuestionList();
+      this.getMistakeList();
     },
-    comment(index, row) {
-      this.questionId = row.questionId;
-      this.dialogVisible = true;
-      this.questionTitle = row.title
-    },
-    async ok() {
-      try {
-        if (!this.commentInfo) {
-          this.$message({
-            showClose: true,
-            message: "评论内容不能为空",
-            type: "warning"
-          });
-          return;
-        } else {
-          let params = {
-            userName: this.userInfo.name,
-            content: Xss(this.commentInfo),
-            questionId: this.questionId,
-            userId: this.userInfo._id,
-            title:this.questionTitle
-          };
-          const result = await post("/api/comment/submitComment", params);
-          if (result.statusCode == 200) {
-            this.$message({
-              showClose: true,
-              message: result.message,
-              type: "success"
-            });
-            this.getQuestionList();
-          } else {
-            this.$message({
-              showClose: true,
-              message: "评论失败",
-              type: "error"
-            });
-          }
-          this.dialogVisible = false;
-          this.commentInfo = "";
-        }
-      } catch (error) {
-        this.$message({
-          showClose: true,
-          message: error.toString(),
-          type: "error"
-        });
-        this.commentInfo = "";
-        this.dialogVisible = false;
-      }
-    },
-    cancel() {
-      if (this.commentInfo) {
-        this.$confirm("确认取消评论？")
-          .then(_ => {
-            this.questionId = "";
-            this.commentInfo = "";
-            this.dialogVisible = false;
-          })
-          .catch(_ => {});
-      } else {
-        this.questionId = "";
-        this.dialogVisible = false;
-      }
-    },
-    handleClose(done) {
-      if (this.commentInfo) {
-        this.$confirm("确认取消评论？")
-          .then(_ => {
-            this.questionId = "";
-            this.commentInfo = "";
-            done();
-          })
-          .catch(_ => {});
-      } else {
-        done();
-      }
-    },
-    search(){
-      this.currentPage = 1
-      this.getQuestionList()
+    search() {
+      this.currentPage = 1;
+      this.getMistakeList();
     }
   },
   computed: {
@@ -331,8 +259,6 @@ export default {
 <style lang="less" scoped>
 .my-container {
   padding: 20px;
-  // position: relative;
-  // height: calc(100% - 71px);
 }
 .min-width {
   min-width: 300px;

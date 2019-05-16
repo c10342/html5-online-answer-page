@@ -53,8 +53,8 @@ export default {
       answerQuestion: [],
       isAnswer: true,
       time: 0,
-      isCanGoback:false,
-      questionType:''
+      isCanGoback: false,
+      questionType: ""
     };
   },
   methods: {
@@ -118,9 +118,9 @@ export default {
         params.title = this.title;
         params.answer = answer;
         // 答题者的用户名
-        params.userName = this.userInfo.name;
+        params.userName = this.userInfo.name || "匿名用户";
         // 答题者id
-        params.userId = this.userInfo._id;
+        params.userId = this.userInfo._id || "234234asdadqwe112131";
         params.questionId = this.$route.params.id;
         params.answerTime = this.showTime;
         params.questionType = this.questionType;
@@ -132,8 +132,12 @@ export default {
               message: result.message,
               showClose: true
             });
-            this.isCanGoback = true
-            this.$router.replace({name:'consultQuestions'});
+            this.isCanGoback = true;
+            if (this.$route.query.isCollection) {
+              this.$router.replace({ name: "collectionQuestion" });
+            } else {
+              this.$router.replace({ name: "consultQuestions" });
+            }
           } else {
             this.$message({
               type: "warning",
@@ -152,7 +156,11 @@ export default {
     },
     // 返回上一级路由
     goBack() {
-      this.$router.push({name:'consultQuestions'});
+      if (this.$route.query.isCollection) {
+        this.$router.push({ name: "collectionQuestion" });
+      } else {
+        this.$router.push({ name: "consultQuestions" });
+      }
     },
     initTime() {
       this.timer = setInterval(() => {
@@ -205,9 +213,9 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
-    if(this.isCanGoback){
-      next()
-      return
+    if (this.isCanGoback) {
+      next();
+      return;
     }
     let flag = true;
     // 判断单选题是否已经完成
@@ -247,7 +255,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          next()
+          next();
         })
         .catch(() => {});
     }

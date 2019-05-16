@@ -102,17 +102,30 @@
                         <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align='center'>
+                <el-table-column label="操作" align='center' width="200">
                     <template slot-scope="scope">
                         <el-button
                         :disabled="scope.row.isAnswer"
-                        size="mini"
+                        size="small"
+                        type="success"
                         @click="handleClick(scope.$index, scope.row)">{{scope.row.isAnswer?'已作答':'开始做题'}}</el-button>
+
+                        <el-button
+                        v-if="!scope.row.isCollection"
+                        size="small"
+                        type="warning"
+                        @click="handleCollection(scope.$index, scope.row)">收藏</el-button>
+
+                        <el-button
+                        v-if="scope.row.isCollection"
+                        size="small"
+                        type="warning"
+                        @click="handleCancelCollection(scope.$index, scope.row)">取消收藏</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <div v-if="total>10" class="text-center my-pagination">
+        <div v-if="total>pageSize" class="text-center my-pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
@@ -140,7 +153,7 @@ export default {
       userName: "",
       beginTime: "",
       endTime: "",
-      questionType:''
+      questionType: ""
     };
   },
   created() {
@@ -197,15 +210,67 @@ export default {
       }
     },
     handleClick(index, row) {
-      this.$router.push({ name: "answerQuestion", params: {id:row._id} });
+      this.$router.push({ name: "answerQuestion", params: { id: row._id } });
     },
     handleCurrentChange(e) {
       this.currentPage = e;
       this.getQuestionList();
     },
-    search(){
-        this.currentPage = 1
-        this.getQuestionList()
+    search() {
+      this.currentPage = 1;
+      this.getQuestionList();
+    },
+    async handleCollection(index, row) {
+      try {
+        let params = { userId: this.userInfo._id, questionId: row._id };
+        const result = await get("/api/questions/collectQuestion", params);
+        if (result.statusCode == 200) {
+          this.getQuestionList();
+          this.$message({
+            showClose: true,
+            message: result.message,
+            type: "success"
+          });
+        } else {
+          this.$message({
+            showClose: true,
+            message: result.message,
+            type: "warning"
+          });
+        }
+      } catch (error) {
+        this.$message({
+          showClose: true,
+          message: error.toString(),
+          type: "error"
+        });
+      }
+    },
+    async handleCancelCollection(index, row) {
+      try {
+        let params = { userId: this.userInfo._id, questionId: row._id };
+        const result = await get("/api/questions/cancelCollectQuestion", params);
+        if (result.statusCode == 200) {
+          this.getQuestionList();
+          this.$message({
+            showClose: true,
+            message: result.message,
+            type: "success"
+          });
+        } else {
+          this.$message({
+            showClose: true,
+            message: result.message,
+            type: "warning"
+          });
+        }
+      } catch (error) {
+        this.$message({
+          showClose: true,
+          message: error.toString(),
+          type: "error"
+        });
+      }
     }
   },
   computed: {

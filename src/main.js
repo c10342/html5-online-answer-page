@@ -96,7 +96,7 @@ router.beforeEach((to, from, next) => {
   // 用户没有登录
   if (!store.state.userInfo._id) {
     // 登录注册页面不需要登录
-    if (to.name == 'login' || to.name == 'register') {
+    if (to.name == 'login' || to.name == 'register' || to.name.startsWith('answerQuestion')) {
       next()
     } else {
       next({

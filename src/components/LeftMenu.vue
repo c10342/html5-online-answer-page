@@ -103,10 +103,16 @@ export default {
           type: "4"
         },
         {
+          icon: "fa-compress",
+          name: "我的收藏",
+          path: "/collectionQuestion",
+          type: "5"
+        },
+        {
           icon: "fa-user",
           name: "用户管理",
           path: "/userMessage",
-          type: "5"
+          type: "6"
         }
       ];
       let jurisdiction = this.userInfo._id ? this.userInfo.jurisdiction : [];

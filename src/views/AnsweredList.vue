@@ -149,7 +149,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div v-if="total>10" class="text-center my-pagination">
+        <div v-if="total>pageSize" class="text-center my-pagination">
             <el-pagination
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"

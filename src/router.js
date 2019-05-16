@@ -23,6 +23,7 @@ import Mbg from './views/Bg.vue'
 import UserMessage from './views/UserMessage.vue'
 import MyCommentList from './views/MyCommentList.vue'
 import MyMistake from './views/MyMistake.vue'
+import CollectionQuestion from './views/CollectionQuestion.vue'
 
 Vue.use(Router)
 
@@ -161,10 +162,16 @@ export const routes = [
     type:'4'
   },
   {
+    path: '/collectionQuestion',
+    name: 'collectionQuestion',
+    component: CollectionQuestion,
+    type:'5'
+  },
+  {
     path: '/userMessage',
     name: 'userMessage',
     component: UserMessage,
-    type:'5'
+    type:'6'
   },
 ]
 
