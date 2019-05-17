@@ -8,4 +8,4 @@ export const clientID =  'a82354ff0df1d871f371'
 export const redirect_uri = 'https://c10342.mynatapp.cc'
 
 
-export const shareUrl = 'http://c10342.mynatapp.cc/answerQuestion'
+export const shareUrl = 'https://c10342.mynatapp.cc/share/index.html'

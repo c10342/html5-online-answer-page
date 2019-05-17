@@ -3,6 +3,7 @@
         <el-button type="primary" @click="openFile">上传试卷</el-button>
         <el-button type="success" @click="downLoadTemplate">下载试卷模板</el-button>
         <input 
+        ref="pathClear"
         type="file" 
         style="display:none" 
         id="file" 
@@ -387,6 +388,8 @@ export default {
           message: error.toString(),
           showClose: true
         });
+      }finally{
+        this.$refs.pathClear.value =''
       }
     },
     resetData() {

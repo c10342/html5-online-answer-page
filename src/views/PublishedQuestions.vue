@@ -173,7 +173,7 @@ export default {
       dialogVisible: false,
       content: "",
       shareInfo: {},
-      wxdialogVisible:false
+      wxdialogVisible: false
     };
   },
   created() {
@@ -288,7 +288,9 @@ export default {
       let obj_QQ = {
         url:
           shareUrl +
-          `/${this.shareInfo.id}` /*获取URL，可加上来自分享到QQ标识，方便统计*/,
+          `?id=${
+            this.shareInfo.id
+          }` /*获取URL，可加上来自分享到QQ标识，方便统计*/,
         desc: this
           .content /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/,
         title: "html5在线答题系统" /*分享标题(可选)*/,
@@ -312,11 +314,11 @@ export default {
       }, 500);
     },
     shareToWX(index, row) {
-      this.wxdialogVisible = true
-      this.$nextTick(()=>{
+      this.wxdialogVisible = true;
+      this.$nextTick(() => {
         var canvas = document.getElementById("canvas");
-      QRCode.toCanvas(canvas, shareUrl +`/${row._id}`);
-      })
+        QRCode.toCanvas(canvas, shareUrl + `?id=${row._id}`);
+      });
     }
   },
   computed: {

@@ -39,6 +39,7 @@
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="name" align="center" label="用户姓名"></el-table-column>
         <el-table-column prop="email" :show-overflow-tooltip="true" align="center" label="邮箱"></el-table-column>
+        <el-table-column prop="violationCount" :show-overflow-tooltip="true" align="center" label="违规次数"></el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间">
           <template slot-scope="scope">
             <div>{{scope.row.createTime | formatDate}}</div>
@@ -101,12 +102,28 @@ export default {
             {
               label: "填写的试卷",
               type: "1-4"
+            },
+            {
+              label: "组装试卷",
+              type: "1-5"
             }
           ]
         },
         {
           label: "试卷统计",
           type: "2"
+        },
+        {
+          label: "我的评论",
+          type: "3"
+        },
+        {
+          label: "我的错题",
+          type: "4"
+        },
+        {
+          label: "我的收藏",
+          type: "5"
         }
       ],
       selectProps: [],
@@ -232,6 +249,8 @@ export default {
         });
       }finally{
         this.dialogVisible = false
+        this.selectProps = null
+        this.getUserList()
       }
     },
     showDialog(row) {
@@ -242,12 +261,15 @@ export default {
     },
     handleCheckChange(data, checked) {
       if (checked) {
-        if (!this.selectProps.includes(data.type || '1')) {
-          this.selectProps.push(data.type || '1');
+        if(!data.type){
+          return
+        }
+        if (!this.selectProps.includes(data.type)) {
+          this.selectProps.push(data.type);
         }
       } else {
-        if (this.selectProps.includes(data.type || '1')) {
-          let index = this.selectProps.findIndex(i => i == data.type || '1');
+        if (this.selectProps.includes(data.type)) {
+          let index = this.selectProps.findIndex(i => i == data.type);
           this.selectProps.splice(index, 1);
         }
       }

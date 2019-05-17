@@ -8,12 +8,16 @@
               <p>{{userInfo.name}}</p>
           </div>
           <div class="flex-row font24" style="margin-top:50px;">
-              <span class="w100 mr10">邮&nbsp;&nbsp;&nbsp;箱 :</span>
+              <span style="width:120px;" class="mr10">邮&nbsp;&nbsp;&nbsp;箱 :</span>
               <p>{{userInfo.email}}</p>
           </div>
           <div class="flex-row font24" style="margin-top:50px;">
-              <span class="w100 mr10">身&nbsp;&nbsp;&nbsp;份 :</span>
+              <span style="width:120px;" class="mr10">身&nbsp;&nbsp;&nbsp;份 :</span>
               <p>{{userInfo.identity}}</p>
+          </div>
+          <div class="flex-row font24" style="margin-top:50px;">
+              <span style="width:120px;" class="mr10">违规次数 :</span>
+              <p>{{userInfo.violationCount}}</p>
           </div>
         </div>
       </template>

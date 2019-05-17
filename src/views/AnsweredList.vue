@@ -269,11 +269,10 @@ export default {
               message: result.message,
               type: "success"
             });
-            this.getQuestionList();
           } else {
             this.$message({
               showClose: true,
-              message: "评论失败",
+              message: result.message,
               type: "error"
             });
           }

@@ -81,6 +81,12 @@ export default {
               name: "填写的试卷",
               path: "/answeredList",
               type: "1-4"
+            },
+            {
+              icon: "fa-crosshairs",
+              name: "组装试卷",
+              path: "/assembleQuestion",
+              type: "1-5"
             }
           ]
         },

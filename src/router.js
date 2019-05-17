@@ -24,6 +24,7 @@ import UserMessage from './views/UserMessage.vue'
 import MyCommentList from './views/MyCommentList.vue'
 import MyMistake from './views/MyMistake.vue'
 import CollectionQuestion from './views/CollectionQuestion.vue'
+import AssembleQuestion from './views/AssembleQuestion.vue'
 
 Vue.use(Router)
 
@@ -142,6 +143,11 @@ export const routes = [
     name: 'answeredList',
     component: AnsweredList,
     type:'1-4'
+  },{
+    path: '/assembleQuestion',
+    name: 'assembleQuestion',
+    component: AssembleQuestion,
+    type:'1-5'
   },
   {
     path: '/questionsStatistics',
