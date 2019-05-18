@@ -66,13 +66,13 @@ export default {
             },
             {
               icon: "fa-google-plus",
-              name: "发布新试卷",
+              name: "发布试卷",
               path: "/addQuestion",
               type: "1-2"
             },
             {
               icon: "fa-file-code-o",
-              name: "发布的试卷",
+              name: "已发布试卷",
               path: "/publishedQuestions",
               type: "1-3"
             },
@@ -84,9 +84,15 @@ export default {
             },
             {
               icon: "fa-crosshairs",
-              name: "组装试卷",
+              name: "试题库",
               path: "/assembleQuestion",
               type: "1-5"
+            },
+            {
+              icon: "fa-plus",
+              name: "添加试题",
+              path: "/itemBank",
+              type: "1-6"
             }
           ]
         },

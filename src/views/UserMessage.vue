@@ -92,11 +92,11 @@ export default {
               type: "1-1"
             },
             {
-              label: "发布新试卷",
+              label: "发布试卷",
               type: "1-2"
             },
             {
-              label: "发布的试卷",
+              label: "已发布试卷",
               type: "1-3"
             },
             {
@@ -104,8 +104,12 @@ export default {
               type: "1-4"
             },
             {
-              label: "组装试卷",
+              label: "试题库",
               type: "1-5"
+            },
+            {
+              label: "添加试题",
+              type: "1-6"
             }
           ]
         },

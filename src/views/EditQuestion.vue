@@ -9,6 +9,7 @@
           <el-option label="问卷调查" value="问卷调查"></el-option>
           <el-option label="在线考试" value="在线考试"></el-option>
           <el-option label="练习题" value="练习题"></el-option>
+          <el-option label="其他" value="其他"></el-option>
         </el-select>
         </div>
         <div class="mt20">

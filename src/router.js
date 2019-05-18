@@ -25,6 +25,7 @@ import MyCommentList from './views/MyCommentList.vue'
 import MyMistake from './views/MyMistake.vue'
 import CollectionQuestion from './views/CollectionQuestion.vue'
 import AssembleQuestion from './views/AssembleQuestion.vue'
+import ItemBank from './views/ItemBank.vue'
 
 Vue.use(Router)
 
@@ -148,6 +149,12 @@ export const routes = [
     name: 'assembleQuestion',
     component: AssembleQuestion,
     type:'1-5'
+  },
+  {
+    path: '/itemBank',
+    name: 'itemBank',
+    component: ItemBank,
+    type:'1-6'
   },
   {
     path: '/questionsStatistics',

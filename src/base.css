@@ -1,52 +1,57 @@
 /* 单选框 */
-.el-radio__inner{
-    width: 25px;
-    height: 25px;
+.el-radio__inner {
+  width: 25px;
+  height: 25px;
 }
-.el-radio__label{
-    font-size: 18px;
+
+.el-radio__label {
+  font-size: 18px;
 }
-.el-radio__inner::after{
-    width: 8px;
-    height: 8px;
+
+.el-radio__inner::after {
+  width: 8px;
+  height: 8px;
 }
-.el-radio{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+
+.el-radio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 /* 多选框 */
-.el-checkbox__inner{
-    width: 25px;
-    height: 25px;
-}
-.el-checkbox__inner::after{
-    left: 10px;
-    top: 6px;
-}
-.el-checkbox__label{
-    font-size: 18px;
+.el-checkbox__inner {
+  width: 25px;
+  height: 25px;
 }
 
-.el-form-item__label{
+.el-checkbox__inner::after {
+  left: 10px;
+  top: 6px;
+}
+
+.el-checkbox__label {
+  font-size: 18px;
+}
+
+.el-form-item__label {
   color: #fff;
 }
 
 
-.deleteItem{
-    font-size: 18px;
-    cursor: pointer;
-    color: rgb(150, 135, 235);
+.deleteItem {
+  font-size: 18px;
+  cursor: pointer;
+  color: rgb(150, 135, 235);
 }
 
-.deleteItem:hover{
-    color: blue;
+.deleteItem:hover {
+  color: blue;
 }
 
 
-.item{
-    justify-content: space-between;
+.item {
+  justify-content: space-between;
 }
 
 
@@ -57,112 +62,150 @@ body,
   height: 100%;
   margin: 0;
 }
-.flex-row{
+
+.flex-row {
   display: flex;
   flex-direction: row;
 }
 
-.flex-center{
+.flex-center {
   justify-content: center;
   align-items: center;
 }
 
-.align-items{
+.align-items {
   align-items: center;
 }
-.justify-content{
+
+.justify-content {
   justify-content: center;
 }
 
-.flex-wrap{
+.flex-wrap {
   flex-wrap: wrap;
 }
 
-.font16{
+.font14 {
+  font-size: 14px;
+}
+.font16 {
   font-size: 16px;
 }
 
-.font18{
+.font18 {
   font-size: 18px;
 }
-.font20{
+
+.font20 {
   font-size: 20px;
 }
-.font24{
+
+.font24 {
   font-size: 24px;
 }
-.w40{
+
+.w40 {
   width: 40px;
 }
-.w100{
+
+.w100 {
   width: 100px;
 }
-.pl10{
+
+.pl10 {
   padding-left: 10px;
 }
-.pr10{
+
+.pr10 {
   padding-right: 10px;
 }
-.pt10{
+
+.pt10 {
   padding-top: 10px;
 }
-.pb10{
+
+.pb10 {
   padding-bottom: 10px;
 }
-.ml10{
+
+.ml10 {
   margin-left: 10px;
 }
-.mr10{
+
+.mr10 {
   margin-right: 10px;
 }
-.mt10{
+
+.mt10 {
   margin-top: 10px;
 }
-.mb10{
+
+.mb10 {
   margin-bottom: 10px;
 }
-.pl20{
+
+.pl20 {
   padding-left: 20px;
 }
-.pr20{
+
+.pr20 {
   padding-right: 20px;
 }
-.pt20{
+
+.pt20 {
   padding-top: 20px;
 }
-.pb20{
+
+.pb20 {
   padding-bottom: 20px;
 }
-.ml20{
+
+.ml20 {
   margin-left: 20px;
 }
-.mr20{
+
+.mr20 {
   margin-right: 20px;
 }
-.mt20{
+
+.mt20 {
   margin-top: 20px;
 }
-.mb20{
+
+.mb20 {
   margin-bottom: 20px;
 }
-.ml30{
+
+.ml30 {
   margin-left: 30px;
 }
-.mr30{
+
+.mr30 {
   margin-right: 30px;
 }
-.mt30{
+
+.mt30 {
   margin-top: 30px;
 }
-.mb30{
+
+.mb30 {
   margin-bottom: 30px;
 }
-.text-left{
-    text-align: left;
+
+.text-left {
+  text-align: left;
 }
-.text-center{
-    text-align: center;
+
+.text-center {
+  text-align: center;
 }
-.text-nowrap{
-    white-space: nowrap;
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.text-hiden {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
 }
