@@ -1,43 +1,43 @@
 <template>
-    <div class="my-container">
-      <div class="time">时间：<span style="color:red;">{{showTime}}</span></div>
-        <div>
-            <div class="flex-row align-items">
-                <span class="text-nowrap mr10 font20">试卷名称 :</span>
-                <span class="font24">{{title}}</span>
-            </div>
-        </div>
-        <!-- 单选题 -->
-        <Single 
-        v-if="singleQuestion.length"
-        :isAnswer='isAnswer'
-        :singleQuestion='singleQuestion'></Single>
-        <!-- 多选题 -->
-        <Multiple 
-        v-if="multipleQuestion.length"
-        :isAnswer='isAnswer'
-        :multipleQuestion='multipleQuestion'></Multiple>
-        <!-- 判断题 -->
-        <Judgement 
-        v-if="judgementQuestion.length"
-        :isAnswer='isAnswer'
-        :judgementQuestion='judgementQuestion'></Judgement>
-        <!-- 简答题 -->
-        <Answer 
-        v-if="answerQuestion.length"
-        :isAnswer='isAnswer'
-        :answerQuestion='answerQuestion'></Answer>
-        <div class="mt20">
-            <el-button type="primary" @click="submit">提交</el-button>
-            <el-button type="success" @click="goBack">返回</el-button>
-        </div>
+  <div class="my-container">
+    <div class="time">
+      时间：
+      <span style="color:red;">{{showTime}}</span>
     </div>
+    <div>
+      <div class="flex-row align-items">
+        <span class="text-nowrap mr10 font20">试卷名称 :</span>
+        <span class="font24">{{title}}</span>
+      </div>
+    </div>
+    <!-- 单选题 -->
+    <Single v-if="singleQuestion.length" :isAnswer="isAnswer" :singleQuestion="singleQuestion"></Single>
+    <!-- 多选题 -->
+    <Multiple
+      v-if="multipleQuestion.length"
+      :isAnswer="isAnswer"
+      :multipleQuestion="multipleQuestion"
+    ></Multiple>
+    <!-- 判断题 -->
+    <Judgement
+      v-if="judgementQuestion.length"
+      :isAnswer="isAnswer"
+      :judgementQuestion="judgementQuestion"
+    ></Judgement>
+    <!-- 简答题 -->
+    <Answer v-if="answerQuestion.length" :isAnswer="isAnswer" :answerQuestion="answerQuestion"></Answer>
+    <div class="mt20">
+      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="success" @click="goBack">返回</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { post, get } from "../util/http.js";
 import { strSimilarity2Percent } from "../util/index.js";
+import storage from "good-storage";
 export default {
   data() {
     return {
@@ -54,7 +54,9 @@ export default {
       isAnswer: true,
       time: 0,
       isCanGoback: false,
-      questionType: ""
+      questionType: "",
+      leaveCount: 0, //鼠标离开窗口次数
+      isSave: 0
     };
   },
   methods: {
@@ -156,28 +158,80 @@ export default {
     },
     // 返回上一级路由
     goBack() {
-      if (this.$route.query.isCollection) {
-        this.$router.push({ name: "collectionQuestion" });
-      } else {
-        this.$router.push({ name: "consultQuestions" });
-      }
+      this.$nextTick(() => {
+        if (this.$route.query.isCollection) {
+          this.$router.push({ name: "collectionQuestion" });
+        } else {
+          this.$router.push({ name: "consultQuestions" });
+        }
+      });
     },
     initTime() {
       this.timer = setInterval(() => {
         this.time++;
       }, 1000);
+    },
+    mouseLeave() {
+      this.leaveCount++;
     }
   },
   async created() {
-    let { id } = this.$route.params;
     try {
+      let { id } = this.$route.params;
+      let q = storage.get(`questionId-${this.$route.params}`);
+      // if(q){
+      //   this.title = q.title
+      //   this.singleQuestion = q.singleQuestion
+      //   this.multipleQuestion = q.multipleQuestion
+      //   this.judgementQuestion = q.judgementQuestion
+      //   this.answerQuestion = q.answerQuestion
+      //   this.questionType = q.questionType
+      //   this.initTime()
+      //   return
+      // }
       const result = await get("/api/questions/getQuestionById/" + id);
       if (result.statusCode == 200) {
         this.title = result.data.questionList.title;
-        this.singleQuestion = result.data.questionList.singleQuestion;
-        this.multipleQuestion = result.data.questionList.multipleQuestion;
-        this.judgementQuestion = result.data.questionList.judgementQuestion;
-        this.answerQuestion = result.data.questionList.answerQuestion;
+        let s = result.data.questionList.singleQuestion;
+        let m = result.data.questionList.multipleQuestion;
+        let j = result.data.questionList.judgementQuestion;
+        let a = result.data.questionList.answerQuestion;
+        if (q) {
+          q.singleQuestion.forEach(item => {
+            let index = s.findIndex(i => i.id == item.id);
+            if (index != -1) {
+              s[index] = item;
+            }
+          });
+          q.multipleQuestion.forEach(item => {
+            let index = m.findIndex(i => i.id == item.id);
+            if (index != -1) {
+              m[index] = item;
+            }
+          });
+          q.judgementQuestion.forEach(item => {
+            let index = j.findIndex(i => i.id == item.id);
+            if (index != -1) {
+              j[index] = item;
+            }
+          });
+          q.answerQuestion.forEach(item => {
+            let index = a.findIndex(i => i.id == item.id);
+            if (index != -1) {
+              a[index] = item;
+            }
+          });
+          this.singleQuestion = s;
+          this.judgementQuestion = j;
+          this.multipleQuestion = m;
+          this.answerQuestion = a;
+          this.time = q.time;
+        } else {
+          this.singleQuestion = s;
+          this.multipleQuestion = m;
+          this.judgementQuestion = j;
+          this.answerQuestion = a;
+        }
         this.questionType = result.data.questionList.questionType;
         this.initTime();
       } else {
@@ -199,6 +253,7 @@ export default {
     if (this.timer) {
       clearInterval(this.timer);
     }
+    window.removeEventListener("mouseleave", this.mouseLeave);
   },
   computed: {
     ...mapGetters(["userInfo"]),
@@ -258,6 +313,115 @@ export default {
           next();
         })
         .catch(() => {});
+    }
+  },
+  watch: {
+    async leaveCount(newVal) {
+      if (this.questionType == "在线考试") {
+        if (newVal <= 3) {
+          this.$message({
+            type: "warning",
+            message: `您已经离开页面${newVal}次,第四次就会被强制交卷`,
+            showClose: true
+          });
+        }
+        if (newVal == 4) {
+          let answer = {};
+          this.singleQuestion.forEach(item => {
+            answer[item.id] = item.answer || "未填写";
+          });
+          this.multipleQuestion.forEach(item => {
+            answer[item.id] = item.answer || "未填写";
+          });
+          this.judgementQuestion.forEach(item => {
+            answer[item.id] = item.answer || "未填写";
+          });
+          this.answerQuestion.forEach(item => {
+            answer[item.id] = item.answer || "未填写";
+          });
+          let params = {};
+          params.title = this.title;
+          params.answer = answer;
+          // 答题者的用户名
+          params.userName = this.userInfo.name;
+          // 答题者id
+          params.userId = this.userInfo._id;
+          params.questionId = this.$route.params.id;
+          params.answerTime = this.showTime;
+          params.questionType = this.questionType;
+          try {
+            const result = await post("/api/questions/submitQuestion", params);
+            if (result.statusCode == 200) {
+              this.$message({
+                type: "success",
+                message: result.message,
+                showClose: true
+              });
+              this.isCanGoback = true;
+              if (this.$route.query.isCollection) {
+                this.$router.replace({ name: "collectionQuestion" });
+              } else {
+                this.$router.replace({ name: "consultQuestions" });
+              }
+            } else {
+              this.$message({
+                type: "warning",
+                message: result.message,
+                showClose: true
+              });
+            }
+          } catch (error) {
+            this.$message({
+              type: "error",
+              message: error.toString(),
+              showClose: true
+            });
+          }
+        }
+      }
+    },
+    questionType(newVal) {
+      if (newVal == "在线考试") {
+        document.addEventListener("mouseleave", this.mouseLeave);
+      }
+    },
+    singleQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    multipleQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    judgementQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    answerQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    isSave(newVal) {
+      if (newVal > 4 && this.questionType != "在线考试") {
+        this.isCanGoback = true;
+        storage.set(`questionId-${this.$route.params}`, {
+          singleQuestion: this.singleQuestion,
+          multipleQuestion: this.multipleQuestion,
+          judgementQuestion: this.judgementQuestion,
+          answerQuestion: this.answerQuestion,
+          title: this.title,
+          questionType: this.questionType,
+          time: this.time
+        });
+      }
     }
   }
 };
