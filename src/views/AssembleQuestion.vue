@@ -76,6 +76,13 @@
                         <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
                 </el-table-column>
+                <el-table-column
+                    align='center'
+                    label="操作">
+                    <template slot-scope="scope">
+                        <el-button @click.stop="deleteBank(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div ref="pagination" v-if="total>pageSize" class="text-center my-pagination">
             <el-pagination
@@ -269,6 +276,41 @@ export default {
           answer:this.answer
         }
       })
+    },
+    deleteBank(index,row){
+      this.$confirm("确定删除试卷?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          try {
+            const result = await get("/api/questions/deleteBank", {
+              id: row._id
+            });
+            if (result.statusCode == 200) {
+              this.$message({
+                showClose: true,
+                type: "success",
+                message: result.message
+              });
+              this.getQuestionList();
+            } else {
+              this.$message({
+                showClose: true,
+                type: "warning",
+                message: result.message
+              });
+            }
+          } catch (error) {
+            this.$message({
+              showClose: true,
+              type: "error",
+              message: error.toString()
+            });
+          }
+        })
+        .catch(() => {});
     }
   },
   beforeDestroy(){

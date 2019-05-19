@@ -1,6 +1,6 @@
 <template>
-    <div class="mt20">
-        <h1 class="font20">一、单选题</h1>
+    <div class="mt20" style="border-bottom:1px solid #ccc;">
+        <h1 class="font20">单选题</h1>
         <div v-if="isAnswer&&singleQuestion.length==0" class="mt20">暂无题目</div>
         <div class="mt30" v-for="(question,index) in singleQuestion" :key="index">
             <div class="flex-row align-items">

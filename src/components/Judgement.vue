@@ -1,6 +1,6 @@
 <template>
-    <div class="mt20">
-        <h1 class="font20">三、判断题</h1>
+    <div class="mt20" style="border-bottom:1px solid #ccc;">
+        <h1 class="font20">判断题</h1>
         <div v-if="isAnswer&&judgementQuestion.length==0" class="mt20">暂无题目</div>
         <div class="mt30" v-for="(question,index) in judgementQuestion" :key="index">
             <div class="flex-row align-items">

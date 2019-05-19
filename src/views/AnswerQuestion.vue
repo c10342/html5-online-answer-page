@@ -118,9 +118,9 @@ export default {
         params.title = this.title;
         params.answer = answer;
         // 答题者的用户名
-        params.userName = this.userInfo.name || "匿名用户";
+        params.userName = this.userInfo.name;
         // 答题者id
-        params.userId = this.userInfo._id || "234234asdadqwe112131";
+        params.userId = this.userInfo._id;
         params.questionId = this.$route.params.id;
         params.answerTime = this.showTime;
         params.questionType = this.questionType;

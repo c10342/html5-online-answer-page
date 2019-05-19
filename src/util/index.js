@@ -71,6 +71,22 @@ export const getRandomStr = () => {
 }
 
 
-const identity = ['管理员','小学生','初中生','高中生','大学生','教师','游客','其他']
+// 获取时间
+export const getDate = () => {
+    const time = new Date()
+    let y = time.getFullYear()
+    let m = time.getMonth()+1
+    let d = time.getDate()
+    m = m<10?`0${m}`:m
+    d = d<10?`0${d}`:d
 
-const questionType = ['常识','交通安全','法律知识','问卷调查','在线考试','练习题']
+    let s = time.getSeconds();
+    s = s < 10 ? `0${s}` : s;
+    let ms = time.getMinutes();
+    ms = ms < 10 ? `0${ms}` : ms;
+    let h = time.getHours();
+    h = h < 10 ? `0${h}` : h;
+    return `${y}-${m}-${d} ${h}：${ms}：${s}`
+}
+
+

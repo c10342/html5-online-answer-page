@@ -51,110 +51,123 @@ export default {
       items: []
     };
   },
-  created(){
+  created() {
     let data = [
-        {
-          icon: "fa-money",
-          name: "试卷管理",
-          type: "1",
-          children: [
-            {
-              icon: "fa-search-minus",
-              name: "查阅试卷",
-              path: "/consultQuestions",
-              type: "1-1"
-            },
-            {
-              icon: "fa-google-plus",
-              name: "发布试卷",
-              path: "/addQuestion",
-              type: "1-2"
-            },
-            {
-              icon: "fa-file-code-o",
-              name: "已发布试卷",
-              path: "/publishedQuestions",
-              type: "1-3"
-            },
-            {
-              icon: "fa-text-width",
-              name: "填写的试卷",
-              path: "/answeredList",
-              type: "1-4"
-            },
-            {
-              icon: "fa-crosshairs",
-              name: "试题库",
-              path: "/assembleQuestion",
-              type: "1-5"
-            },
-            {
-              icon: "fa-plus",
-              name: "添加试题",
-              path: "/itemBank",
-              type: "1-6"
-            }
-          ]
-        },
-        {
-          icon: "fa-asterisk",
-          name: "试卷统计",
-          path: "/questionsStatistics",
-          type: "2"
-        },
-        {
-          icon: "fa-comment",
-          name: "我的评论",
-          path: "/myCommentList",
-          type: "3"
-        },
-        {
-          icon: "fa-exclamation-triangle",
-          name: "我的错题",
-          path: "/myMistake",
-          type: "4"
-        },
-        {
-          icon: "fa-compress",
-          name: "我的收藏",
-          path: "/collectionQuestion",
-          type: "5"
-        },
-        {
-          icon: "fa-user",
-          name: "用户管理",
-          path: "/userMessage",
-          type: "6"
-        }
-      ];
-      let jurisdiction = this.userInfo._id ? this.userInfo.jurisdiction : [];
-      let arr = [];
-      data.forEach(item => {
-        if (jurisdiction.includes(item.type)) {
-          let obj = {
-            name: item.name,
-            icon: item.icon,
-            path: item.path,
-            type: item.type
-          };
-          if (item.children && item.children.length != 0) {
-            obj.children = [];
-            item.children.forEach(i => {
-              if (jurisdiction.includes(i.type)) {
-                let obj1 = {
-                  name: i.name,
-                  icon: i.icon,
-                  path: i.path,
-                  type: i.type
-                };
-                obj.children.push(obj1);
-              }
-            });
+      {
+        icon: "fa-money",
+        name: "试卷管理",
+        type: "1",
+        children: [
+          {
+            icon: "fa-search-minus",
+            name: "查阅试卷",
+            path: "/consultQuestions",
+            type: "1-1"
+          },
+          {
+            icon: "fa-google-plus",
+            name: "发布试卷",
+            path: "/addQuestion",
+            type: "1-2"
+          },
+          {
+            icon: "fa-file-code-o",
+            name: "已发布试卷",
+            path: "/publishedQuestions",
+            type: "1-3"
+          },
+          {
+            icon: "fa-text-width",
+            name: "填写的试卷",
+            path: "/answeredList",
+            type: "1-4"
           }
-          arr.push(obj);
+        ]
+      },
+      {
+        icon: "fa-area-chart",
+        name: "试题管理",
+        type: "2",
+        children: [
+          {
+            icon: "fa-crosshairs",
+            name: "试题库",
+            path: "/assembleQuestion",
+            type: "2-1"
+          },
+          {
+            icon: "fa-plus",
+            name: "添加试题",
+            path: "/itemBank",
+            type: "2-2"
+          },
+          {
+            icon: "fa-exclamation-triangle",
+            name: "我的错题",
+            path: "/myMistake",
+            type: "2-3"
+          },
+          {
+            icon: "fa-file-excel-o",
+            name: "练习题",
+            path: "/exercises",
+            type: "2-4"
+          }
+        ]
+      },
+      {
+        icon: "fa-asterisk",
+        name: "试卷统计",
+        path: "/questionsStatistics",
+        type: "3"
+      },
+      {
+        icon: "fa-comment",
+        name: "我的评论",
+        path: "/myCommentList",
+        type: "4"
+      },
+      {
+        icon: "fa-compress",
+        name: "我的收藏",
+        path: "/collectionQuestion",
+        type: "5"
+      },
+      {
+        icon: "fa-user",
+        name: "用户管理",
+        path: "/userMessage",
+        type: "6"
+      }
+    ];
+    let jurisdiction = this.userInfo._id ? this.userInfo.jurisdiction : [];
+    let arr = [];
+    data.forEach(item => {
+      if (jurisdiction.includes(item.type)) {
+        let obj = {
+          name: item.name,
+          icon: item.icon,
+          path: item.path,
+          type: item.type
+        };
+        if (item.children && item.children.length != 0) {
+          obj.children = [];
+          item.children.forEach(i => {
+            if (jurisdiction.includes(i.type)) {
+              let obj1 = {
+                name: i.name,
+                icon: i.icon,
+                path: i.path,
+                type: i.type
+              };
+              obj.children.push(obj1);
+            }
+          });
         }
-      });
-      this.items = arr
+        arr.push(obj);
+      }
+    });
+    this.items = arr;
   },
   computed: {
     ...mapGetters(["userInfo"])

@@ -26,6 +26,7 @@ import MyMistake from './views/MyMistake.vue'
 import CollectionQuestion from './views/CollectionQuestion.vue'
 import AssembleQuestion from './views/AssembleQuestion.vue'
 import ItemBank from './views/ItemBank.vue'
+import Exercises from './views/Exercises.vue'
 
 Vue.use(Router)
 
@@ -111,7 +112,7 @@ export default new Router({
       name: 'answerUserList',
       component: AnswerUserList
     },
-    
+
     ]
   },
   {
@@ -127,64 +128,70 @@ export const routes = [
     path: '/consultQuestions',
     name: 'consultQuestions',
     component: ConsultQuestions,
-    type:'1-1'
+    type: '1-1'
   },
   {
     path: '/addQuestion',
     name: 'addQuestion',
     component: AddQuestion,
-    type:'1-2'
-  },{
+    type: '1-2'
+  }, {
     path: '/publishedQuestions',
     name: 'publishedQuestions',
     component: PublishedQuestions,
-    type:'1-3'
-  },{
+    type: '1-3'
+  }, {
     path: '/answeredList',
     name: 'answeredList',
     component: AnsweredList,
-    type:'1-4'
-  },{
+    type: '1-4'
+  }, {
     path: '/assembleQuestion',
     name: 'assembleQuestion',
     component: AssembleQuestion,
-    type:'1-5'
+    type: '2-1'
   },
   {
     path: '/itemBank',
     name: 'itemBank',
     component: ItemBank,
-    type:'1-6'
-  },
-  {
-    path: '/questionsStatistics',
-    name: 'questionsStatistics',
-    component: QuestionsStatistics,
-    type:'2'
-  },
-  {
-    path: '/myCommentList',
-    name: 'myCommentList',
-    component: MyCommentList,
-    type:'3'
+    type: '2-2'
   },
   {
     path: '/myMistake',
     name: 'myMistake',
     component: MyMistake,
-    type:'4'
+    type: '2-3'
+  },
+  {
+    path: '/exercises',
+    name: 'exercises',
+    component: Exercises,
+    type: '2-4'
+  },
+  {
+    path: '/questionsStatistics',
+    name: 'questionsStatistics',
+    component: QuestionsStatistics,
+    type: '3'
+  },
+  {
+    path: '/myCommentList',
+    name: 'myCommentList',
+    component: MyCommentList,
+    type: '4'
   },
   {
     path: '/collectionQuestion',
     name: 'collectionQuestion',
     component: CollectionQuestion,
-    type:'5'
+    type: '5'
   },
   {
     path: '/userMessage',
     name: 'userMessage',
     component: UserMessage,
-    type:'6'
+    type: '6'
   },
 ]
 

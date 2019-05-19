@@ -142,14 +142,14 @@ export default {
     },
     async create() {
       if (
-        this.singleQuestion.length == 0 &&
-        this.multipleQuestion.length == 0 &&
-        this.judgementQuestion.length == 0 &&
+        this.singleQuestion.length == 0 ||
+        this.multipleQuestion.length == 0 ||
+        this.judgementQuestion.length == 0 ||
         this.answerQuestion.length == 0
       ) {
         this.$message({
           showClose: true,
-          message: "试卷至少要有一道试题",
+          message: "试卷每个类型必须有一道试题",
           type: "warning"
         });
         return;
