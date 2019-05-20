@@ -129,6 +129,7 @@ export default {
         try {
           const result = await post("/api/questions/submitQuestion", params);
           if (result.statusCode == 200) {
+            storage.remove(`questionId-${this.$route.params.id}`)
             this.$message({
               type: "success",
               message: result.message,
@@ -178,17 +179,7 @@ export default {
   async created() {
     try {
       let { id } = this.$route.params;
-      let q = storage.get(`questionId-${this.$route.params}`);
-      // if(q){
-      //   this.title = q.title
-      //   this.singleQuestion = q.singleQuestion
-      //   this.multipleQuestion = q.multipleQuestion
-      //   this.judgementQuestion = q.judgementQuestion
-      //   this.answerQuestion = q.answerQuestion
-      //   this.questionType = q.questionType
-      //   this.initTime()
-      //   return
-      // }
+      let q = storage.get(`questionId-${this.$route.params.id}`);
       const result = await get("/api/questions/getQuestionById/" + id);
       if (result.statusCode == 200) {
         this.title = result.data.questionList.title;
@@ -200,25 +191,49 @@ export default {
           q.singleQuestion.forEach(item => {
             let index = s.findIndex(i => i.id == item.id);
             if (index != -1) {
-              s[index] = item;
+              let str1 = JSON.stringify(Object.assign({},item,{message:'',answer:''}))
+              let str2 = JSON.stringify(Object.assign({},s[index],{message:'',answer:''}))
+              if(str1 == str2){
+                s[index] = item;
+              }else{
+                s[index].answer = item.answer
+              }
             }
           });
           q.multipleQuestion.forEach(item => {
             let index = m.findIndex(i => i.id == item.id);
             if (index != -1) {
-              m[index] = item;
+              let str1 = JSON.stringify(Object.assign({},item,{message:'',answer:''}))
+              let str2 = JSON.stringify(Object.assign({},m[index],{message:'',answer:''}))
+              if(str1 == str2){
+                m[index] = item;
+              }else{
+                m[index].answer = item.answer
+              }
             }
           });
           q.judgementQuestion.forEach(item => {
             let index = j.findIndex(i => i.id == item.id);
             if (index != -1) {
-              j[index] = item;
+              let str1 = JSON.stringify(Object.assign({},item,{message:'',answer:''}))
+              let str2 = JSON.stringify(Object.assign({},j[index],{message:'',answer:''}))
+              if(str1 == str2){
+                j[index] = item;
+              }else{
+                j[index].answer = item.answer
+              }
             }
           });
           q.answerQuestion.forEach(item => {
             let index = a.findIndex(i => i.id == item.id);
             if (index != -1) {
-              a[index] = item;
+              let str1 = JSON.stringify(Object.assign({},item,{message:'',answer:''}))
+              let str2 = JSON.stringify(Object.assign({},a[index],{message:'',answer:''}))
+              if(str1 == str2){
+                a[index] = item;
+              }else{
+                a[index].answer = item.answer
+              }
             }
           });
           this.singleQuestion = s;
@@ -412,7 +427,7 @@ export default {
     isSave(newVal) {
       if (newVal > 4 && this.questionType != "在线考试") {
         this.isCanGoback = true;
-        storage.set(`questionId-${this.$route.params}`, {
+        storage.set(`questionId-${this.$route.params.id}`, {
           singleQuestion: this.singleQuestion,
           multipleQuestion: this.multipleQuestion,
           judgementQuestion: this.judgementQuestion,

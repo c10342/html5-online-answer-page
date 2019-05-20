@@ -36,7 +36,7 @@
                 <el-button type="primary" @click="search">查询</el-button>
             </div>
         </div>
-        <div class="mt20" v-if="selectTypes==0 || selectTypes==1">
+        <div class="mt20" v-show="selectTypes==0 || selectTypes==1">
             <el-table
                 :data="mistakeList"
                 style="width: 100%">
@@ -75,6 +75,12 @@
                     label="D">
                 </el-table-column>
                 <el-table-column
+                    prop="count"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="错误次数">
+                </el-table-column>
+                <el-table-column
                     prop="myAnswer"
                     align='center'
                     :show-overflow-tooltip='true'
@@ -95,9 +101,16 @@
                         <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
                 </el-table-column>
+                <el-table-column
+                    align='center'
+                    label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="warning" @click="deleteMistake(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
-        <div class="mt20" v-if="selectTypes==2 || selectTypes==3">
+        <div class="mt20" v-show="selectTypes==2 || selectTypes==3">
             <el-table
                 :data="mistakeList"
                 style="width: 100%">
@@ -110,6 +123,12 @@
                     align='center'
                     :show-overflow-tooltip='true'
                     label="题目">
+                </el-table-column>
+                <el-table-column
+                    prop="count"
+                    align='center'
+                    :show-overflow-tooltip='true'
+                    label="错误次数">
                 </el-table-column>
                 <el-table-column
                     prop="myAnswer"
@@ -130,6 +149,13 @@
                     label="时间">
                     <template slot-scope="scope">
                         <div>{{scope.row.createTime | formatDate}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    align='center'
+                    label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="warning"  @click="deleteMistake(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -162,7 +188,7 @@ export default {
       beginTime: "",
       endTime: "",
       types: { label: "单选题", value: 0 },
-      selectTypes:0
+      selectTypes: 0
     };
   },
   created() {
@@ -197,8 +223,8 @@ export default {
         if (result.statusCode == 200) {
           let mistakeList = result.data.mistakeList;
           let arr = [];
-          let val = this.types.value
-          this.selectTypes = val
+          let val = this.types.value;
+          this.selectTypes = val;
           if (val == 0 || val == 1) {
             mistakeList.forEach(item => {
               arr.push({
@@ -209,7 +235,9 @@ export default {
                 D: item.question.options.D,
                 myAnswer: item.question.answer.toString(),
                 answer: item.question.message.toString(),
-                createTime: item.createTime
+                createTime: item.createTime,
+                count: item.count,
+                _id: item._id
               });
             });
           }
@@ -219,11 +247,12 @@ export default {
                 title: item.question.title,
                 myAnswer: item.question.answer,
                 answer: item.question.message,
-                createTime: item.createTime
+                createTime: item.createTime,
+                count: item.count
               });
             });
           }
-          this.mistakeList = arr
+          this.mistakeList = arr;
           this.total = result.data.total;
         } else {
           this.$message({
@@ -248,6 +277,41 @@ export default {
     search() {
       this.currentPage = 1;
       this.getMistakeList();
+    },
+    deleteMistake(index, row) {
+      this.$confirm("确定删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          try {
+            const result = await get("/api/questions/deleteMistake", {
+              id: row._id
+            });
+            if (result.statusCode == 200) {
+              this.$message({
+                showClose: true,
+                message: result.message,
+                type: "success"
+              });
+              this.getMistakeList()
+            } else {
+              this.$message({
+                showClose: true,
+                message: result.message,
+                type: "warning"
+              });
+            }
+          } catch (error) {
+            this.$message({
+              showClose: true,
+              type: "error",
+              message: error.toString()
+            });
+          }
+        })
+        .catch(() => {});
     }
   },
   computed: {

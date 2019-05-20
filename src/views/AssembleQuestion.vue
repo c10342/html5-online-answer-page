@@ -1,5 +1,82 @@
 <template>
     <div style="height:87%;" class="my-container" ref="container">
+        <el-dialog
+          title="编辑"
+          :visible.sync="dialogVisible"
+          width="50%">
+          <div class="mb20 flex-row align-items">
+            <h1 style="font-size:20px;">试卷类型：</h1>
+            <el-select v-model="selectQuestion.questionType" placeholder="请选择试卷类型">
+            <el-option label="常识" value="常识"></el-option>
+            <el-option label="交通安全" value="交通安全"></el-option>
+            <el-option label="法律知识" value="法律知识"></el-option>
+            <el-option label="问卷调查" value="问卷调查"></el-option>
+            <el-option label="在线考试" value="在线考试"></el-option>
+            <el-option label="练习题" value="练习题"></el-option>
+            <el-option label="其他" value="其他"></el-option>
+          </el-select>
+          </div>
+            <div v-if="selectQuestion.type == 0">
+              <div class="flex-row align-items">
+                <span class="font20 text-nowrap mr10">题目 : </span>
+                <el-input v-model.trim="selectQuestion.question.title" placeholder="请输入题目"></el-input>
+            </div>
+              <div class="mb10 mt10 flex-row" v-for="(i,option) in selectQuestion.question.options" :key="option">
+                <el-radio  v-model.trim="selectQuestion.question.answer" :label="option" class="mr20">{{option}}</el-radio>
+                <el-input v-model.trim="selectQuestion.question.options[option]" placeholder="请输入"></el-input>
+              </div>
+            </div>
+            <div v-if="selectQuestion.type == 1">
+              <div class="flex-row align-items">
+                <span class="font20 text-nowrap mr10">题目 : </span>
+                <el-input v-model.trim="selectQuestion.question.title" placeholder="请输入题目"></el-input>
+            </div>
+              <div class="mb10 mt10 flex-row align-items" v-for="(i,option) in selectQuestion.question.options" :key="option">
+                <el-checkbox v-model.trim="selectQuestion.question.answer" :label="option" class="mr20">{{option}}</el-checkbox>
+                <el-input v-model.trim="selectQuestion.question.options[option]" placeholder="请输入"></el-input>
+              </div>
+            </div>
+            <div v-if="selectQuestion.type == 2">
+              <div class="flex-row align-items">
+                <span class="font20 text-nowrap mr10">题目 : </span>
+                <el-input v-model.trim="selectQuestion.question.title" placeholder="请输入题目"></el-input>
+            </div>
+              <div class="mt20  mt10 flex-row">
+                <el-radio v-model.trim="selectQuestion.question.answer" label="A" class="mr20">对</el-radio>
+                <el-radio v-model.trim="selectQuestion.question.answer" label="B" class="mr20">错</el-radio>
+              </div>
+            </div>
+            <div v-if="selectQuestion.type == 3">
+              <div class="flex-row align-items">
+                <span class="font20 text-nowrap mr10">题目 : </span>
+                <el-input v-model.trim="selectQuestion.question.title" placeholder="请输入题目"></el-input>
+            </div>
+               <div class="mt20 mt10 flex-row">
+                <el-input
+                    type="textarea"
+                    placeholder="请输入内容"
+                    :autosize="{ minRows: 5, maxRows: 8}"
+                    v-model.trim="selectQuestion.question.answer">
+                </el-input>
+              </div>
+            </div>
+            <div class="mt20">
+                <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
+                <el-checkbox-group v-model="selectQuestion.checkList">
+                <el-checkbox label="小学生"></el-checkbox>
+                <el-checkbox label="初中生"></el-checkbox>
+                <el-checkbox label="高中生"></el-checkbox>
+                <el-checkbox label="大学生"></el-checkbox>
+                <el-checkbox label="教师"></el-checkbox>
+                <el-checkbox label="游客"></el-checkbox>
+                <el-checkbox label="其他"></el-checkbox>
+              </el-checkbox-group>
+            </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="ok">确 定</el-button>
+          </span>
+        </el-dialog>
         <div class="flex-row flex-wrap" ref="top">
             <div class="flex-row flex-center min-width mt10">
             <span class="text-nowrap pr10 font18">试题名称 : </span>
@@ -80,7 +157,9 @@
                     align='center'
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button @click.stop="deleteBank(scope.$index, scope.row)">删除</el-button>
+                      <el-button v-if="userInfo._id == scope.row.userId" type='success' @click.stop="editBank(scope.$index, scope.row)">修改</el-button>
+                      <el-button v-if="userInfo._id == scope.row.userId" type='warning' @click.stop="deleteBank(scope.$index, scope.row)">删除</el-button>
+                      <p  v-if="userInfo._id != scope.row.userId">不可操作该试题</p>
                     </template>
                 </el-table-column>
             </el-table>
@@ -163,6 +242,8 @@ export default {
       judgement: [],
       // 问答题
       answer: [],
+      dialogVisible:false,
+      selectQuestion:{}
     };
   },
   created() {
@@ -210,6 +291,7 @@ export default {
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;
         params.userId = this.userInfo._id;
+        params.checkList = this.userInfo.identity;
         const result = await get("/api/questions/getItemBank", params);
         if (result.statusCode == 200) {
           this.questionsList = result.data.itemList;
@@ -311,6 +393,41 @@ export default {
           }
         })
         .catch(() => {});
+    },
+    editBank(index,row){
+      this.selectQuestion = Object.assign({},row,{checkList:JSON.parse(row.checkList)})
+      this.dialogVisible = true
+    },
+    async ok(){
+       try {
+            const result = await post("/api/questions/editBank", {
+              question:Object.assign({},this.selectQuestion,{
+                checkList:JSON.stringify(this.selectQuestion.checkList),
+                title:this.selectQuestion.question.title
+              })
+            });
+            if (result.statusCode == 200) {
+              this.dialogVisible = false
+              this.$message({
+                showClose: true,
+                type: "success",
+                message: result.message
+              });
+              this.getQuestionList();
+            } else {
+              this.$message({
+                showClose: true,
+                type: "warning",
+                message: result.message
+              });
+            }
+          } catch (error) {
+            this.$message({
+              showClose: true,
+              type: "error",
+              message: error.toString()
+            });
+          }
     }
   },
   beforeDestroy(){

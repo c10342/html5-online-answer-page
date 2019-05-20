@@ -102,33 +102,42 @@ export default {
             {
               label: "填写的试卷",
               type: "1-4"
-            },
+            }
+          ]
+        },
+        {
+          label: "试题管理",
+          children: [
             {
               label: "试题库",
-              type: "1-5"
+              type: "2-1"
             },
             {
               label: "添加试题",
-              type: "1-6"
+              type: "2-2"
+            },
+            {
+              label: "我的错题",
+              type: "2-3"
+            },
+            {
+              label: "练习题",
+              type: "2-4"
             }
           ]
         },
         {
           label: "试卷统计",
-          type: "2"
-        },
-        {
-          label: "我的评论",
           type: "3"
         },
         {
-          label: "我的错题",
+          label: "我的评论",
           type: "4"
         },
         {
           label: "我的收藏",
           type: "5"
-        }
+        },
       ],
       selectProps: [],
       selectUserInfo: {}
@@ -227,12 +236,25 @@ export default {
         if (flag) {
           this.selectProps.push("1");
         }
+
+        let flag1 = false;
+        if (!this.selectProps.includes("2")) {
+          this.selectProps.forEach(i => {
+            if (i.startsWith("2")) {
+              flag1 = true;
+            }
+          });
+        }
+        if (flag1) {
+          this.selectProps.push("2");
+        }
         let params = {
           id:this.selectUserInfo._id,
           jurisdiction:JSON.stringify(this.selectProps)
         }
         const result = await post("/api/user/updateJurisdiction",params)
         if (result.statusCode == 200) {
+          this.getUserList()
           this.$message({
             showClose: true,
             message: result.message,

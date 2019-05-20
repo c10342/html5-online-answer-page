@@ -14,8 +14,10 @@ let startLoading = () => {
 }
 
 let endLoading = () => {
-    loadingInstance.close()
-    loadingInstance = null
+    if(loadingInstance){
+        loadingInstance.close()
+        loadingInstance = null
+    }
 }
 
 // get请求

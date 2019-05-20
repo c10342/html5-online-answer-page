@@ -7,7 +7,7 @@
               <span class="w100 mr10">用户名 :</span>
               <p>{{userInfo.name}}</p>
           </div>
-          <div class="flex-row font24" style="margin-top:50px;">
+          <div v-if="userInfo.email.includes('@')" class="flex-row font24" style="margin-top:50px;">
               <span style="width:120px;" class="mr10">邮&nbsp;&nbsp;&nbsp;箱 :</span>
               <p>{{userInfo.email}}</p>
           </div>

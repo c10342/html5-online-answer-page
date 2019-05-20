@@ -41,6 +41,18 @@
         :answerQuestion='answerQuestion'
         @addAnswer='addAnswer' 
         @deleteItem='deleteItem'></Answer>
+        <div class="mt20">
+        <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
+        <el-checkbox-group v-model="checkList">
+        <el-checkbox label="小学生"></el-checkbox>
+        <el-checkbox label="初中生"></el-checkbox>
+        <el-checkbox label="高中生"></el-checkbox>
+        <el-checkbox label="大学生"></el-checkbox>
+        <el-checkbox label="教师"></el-checkbox>
+        <el-checkbox label="游客"></el-checkbox>
+        <el-checkbox label="其他"></el-checkbox>
+      </el-checkbox-group>
+      </div>
         <div class="mt20" v-if="!isShow">
             <el-button type="primary" @click="create">添加</el-button>
         </div>
@@ -62,7 +74,7 @@ export default {
       judgementQuestion: [],
       // 问答题
       answerQuestion: [],
-      checkList:['管理员','小学生','初中生','高中生','大学生','教师','游客','其他'],
+      checkList:[],
       questionType:'常识'
     };
   },
@@ -212,10 +224,12 @@ export default {
         params.userId = this.userInfo._id;
 
         params.questionType = this.questionType
+        params.checkList = JSON.stringify(this.checkList)
 
         try {
           const result = await post("/api/questions/addItemBank", params);
           if (result.statusCode == 200) {
+            this.checkList = []
             this.$message({
               type: "success",
               message: result.message,

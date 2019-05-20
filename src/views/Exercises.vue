@@ -92,27 +92,27 @@ export default {
       let multipleAnswer = {};
       let judgementAnswer = {};
       let answerAnswer = {};
-            // 判断单选题信息是否齐全
-      this.singleQuestion.forEach(item => {
-          singleAnswer[item.id] = item.a;
-      });
-      // 判断多选题信息是否齐全
-      this.multipleQuestion.forEach(item => {   
-          multipleAnswer[item.id] = item.a.sort().toString();
-      });
-      // 判断判断题信息是否齐全
-      this.judgementQuestion.forEach(item => {
-        
-          judgementAnswer[item.id] = item.a;
-      });
-      // 判断简答题信息是否齐全
-      this.answerQuestion.forEach(item => {
-          answerAnswer[item.id] = item.a;
-      });
+      // // 判断单选题信息是否齐全
+      // this.singleQuestion.forEach(item => {
+      //     singleAnswer[item.id] = item.answer;
+      // });
+      // // 判断多选题信息是否齐全
+      // this.multipleQuestion.forEach(item => {   
+      //     multipleAnswer[item.id] = item.answer.sort().toString();
+      // });
+      // // 判断判断题信息是否齐全
+      // this.judgementQuestion.forEach(item => {
+      //     judgementAnswer[item.id] = item.answer;
+      // });
+      // // 判断简答题信息是否齐全
+      // this.answerQuestion.forEach(item => {
+      //     answerAnswer[item.id] = item.answer;
+      // });
 
-
+      let s = []
       // 判断单选题是否已经完成
       this.singleQuestion.forEach(item => {
+        singleAnswer[item.id] = item.a;
         let message = null;
         if (!item.answer) {
           message = "该题还没有完成";
@@ -120,12 +120,19 @@ export default {
         if (message) {
           flag = false;
         } else {
-          answer[item.id] = item.a;
+          answer[item.id] = item.answer;
         }
         item.message = message;
+        s.push({
+          ...item,
+          answer:item.a
+        })
       });
+
+      let m = []
       // 判断多选题是否已经完成
       this.multipleQuestion.forEach(item => {
+        multipleAnswer[item.id] = item.a.sort().toString();
         let message = null;
         if (item.answer.length == 0) {
           message = "该题还没有完成";
@@ -136,9 +143,16 @@ export default {
           answer[item.id] = item.answer;
         }
         item.message = message;
+        m.push({
+          ...item,
+          answer:item.a
+        })
       });
+
+      let j = []
       // 判断判断题是否已经完成
       this.judgementQuestion.forEach(item => {
+        judgementAnswer[item.id] = item.a;
         let message = null;
         if (!item.answer) {
           message = "该题还没有完成";
@@ -149,9 +163,16 @@ export default {
           answer[item.id] = item.answer;
         }
         item.message = message;
+        j.push({
+          ...item,
+          answer:item.a
+        })
       });
+
+      let a = []
       // 判断简答题是否已经完成
       this.answerQuestion.forEach(item => {
+        answerAnswer[item.id] = item.a;
         let message = null;
         if (!item.answer) {
           message = "该题还没有完成";
@@ -162,6 +183,10 @@ export default {
           answer[item.id] = item.answer;
         }
         item.message = message;
+        a.push({
+          ...item,
+          answer:item.a
+        })
       });
       if (!flag) {
         this.$message({
@@ -170,7 +195,6 @@ export default {
           showClose: true
         });
       }
-      
       if (flag) {
         let params = {};
         params.title = `练习题(${getDate()})`;
@@ -182,24 +206,24 @@ export default {
         params.answerTime = this.showTime;
         params.questionType = this.questionType;
         params.singleQuestion = {
-          question: this.singleQuestion,
+          question: s,
           answer: singleAnswer,
-          count: this.singleQuestion.length
+          count: s.length
         }
         params.multipleQuestion = {
-          question: this.multipleQuestion,
+          question: m,
           answer: multipleAnswer,
-          count: this.multipleQuestion.length
+          count: m.length
         };
         params.judgementQuestion = {
-          question: this.judgementQuestion,
+          question: j,
           answer: judgementAnswer,
-          count: this.judgementQuestion.length
+          count: j.length
         };
         params.answerQuestion = {
-          question: this.answerQuestion,
+          question: a,
           answer: answerAnswer,
-          count: this.answerQuestion.length
+          count: a.length
         };
         params.flag = '2'
         try {
