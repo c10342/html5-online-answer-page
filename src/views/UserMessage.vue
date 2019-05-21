@@ -39,7 +39,12 @@
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="name" align="center" label="用户姓名"></el-table-column>
         <el-table-column prop="email" :show-overflow-tooltip="true" align="center" label="邮箱"></el-table-column>
-        <el-table-column prop="violationCount" :show-overflow-tooltip="true" align="center" label="违规次数"></el-table-column>
+        <el-table-column
+          prop="violationCount"
+          :show-overflow-tooltip="true"
+          align="center"
+          label="违规次数"
+        ></el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间">
           <template slot-scope="scope">
             <div>{{scope.row.createTime | formatDate}}</div>
@@ -82,7 +87,7 @@ export default {
       endTime: "",
       email: "",
       dialogVisible: false,
-      defaultKey:[],
+      defaultKey: [],
       props: [
         {
           label: "试卷管理",
@@ -137,7 +142,7 @@ export default {
         {
           label: "我的收藏",
           type: "5"
-        },
+        }
       ],
       selectProps: [],
       selectUserInfo: {}
@@ -191,30 +196,38 @@ export default {
         });
       }
     },
-    async handleDelete(id) {
-      try {
-        const result = await get("/api/user/deleteUser", { id });
-        if (result.statusCode == 200) {
-          this.$message({
-            showClose: true,
-            message: result.message,
-            type: "success"
-          });
-          await this.getUserList();
-        } else {
-          this.$message({
-            showClose: true,
-            message: result.message,
-            type: "warning"
-          });
-        }
-      } catch (error) {
-        this.$message({
-          showClose: true,
-          message: error.toString(),
-          type: "error"
-        });
-      }
+    handleDelete(id) {
+      this.$confirm("确定删除试卷?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          try {
+            const result = await get("/api/user/deleteUser", { id });
+            if (result.statusCode == 200) {
+              this.$message({
+                showClose: true,
+                message: result.message,
+                type: "success"
+              });
+              await this.getUserList();
+            } else {
+              this.$message({
+                showClose: true,
+                message: result.message,
+                type: "warning"
+              });
+            }
+          } catch (error) {
+            this.$message({
+              showClose: true,
+              message: error.toString(),
+              type: "error"
+            });
+          }
+        })
+        .catch(() => {});
     },
     handleCurrentChange(e) {
       this.currentPage = e;
@@ -249,12 +262,12 @@ export default {
           this.selectProps.push("2");
         }
         let params = {
-          id:this.selectUserInfo._id,
-          jurisdiction:JSON.stringify(this.selectProps)
-        }
-        const result = await post("/api/user/updateJurisdiction",params)
+          id: this.selectUserInfo._id,
+          jurisdiction: JSON.stringify(this.selectProps)
+        };
+        const result = await post("/api/user/updateJurisdiction", params);
         if (result.statusCode == 200) {
-          this.getUserList()
+          this.getUserList();
           this.$message({
             showClose: true,
             message: result.message,
@@ -273,22 +286,22 @@ export default {
           message: error.toString(),
           type: "error"
         });
-      }finally{
-        this.dialogVisible = false
-        this.selectProps = null
-        this.getUserList()
+      } finally {
+        this.dialogVisible = false;
+        this.selectProps = null;
+        this.getUserList();
       }
     },
     showDialog(row) {
       this.selectUserInfo = row;
       this.defaultKey = row.jurisdiction;
-      this.selectProps = row.jurisdiction
+      this.selectProps = row.jurisdiction;
       this.dialogVisible = true;
     },
     handleCheckChange(data, checked) {
       if (checked) {
-        if(!data.type){
-          return
+        if (!data.type) {
+          return;
         }
         if (!this.selectProps.includes(data.type)) {
           this.selectProps.push(data.type);
@@ -304,11 +317,11 @@ export default {
   computed: {
     ...mapGetters(["userInfo"])
   },
-  watch:{
-    dialogVisible(newVal){
-      if(!newVal){
-        this.selectProps = []
-        this.defaultKey = []
+  watch: {
+    dialogVisible(newVal) {
+      if (!newVal) {
+        this.selectProps = [];
+        this.defaultKey = [];
       }
     }
   }
