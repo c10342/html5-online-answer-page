@@ -21,7 +21,7 @@
     <div class="flex-row flex-wrap">
       <div class="flex-row flex-center min-width mt10">
         <span class="text-nowrap pr10 font18">简答题数量 :</span>
-        <el-input v-model="multipleCount" placeholder="请输入简答题数量" clearable></el-input>
+        <el-input v-model="answerCount" placeholder="请输入简答题数量" clearable></el-input>
       </div>
       <div class="flex-row flex-center min-width mt10">
         <span class="text-nowrap pr10 pl10 font18">试题类型 :</span>
