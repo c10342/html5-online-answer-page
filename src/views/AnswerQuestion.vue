@@ -426,7 +426,6 @@ export default {
     },
     isSave(newVal) {
       if (newVal > 4 && this.questionType != "在线考试") {
-        this.isCanGoback = true;
         storage.set(`questionId-${this.$route.params.id}`, {
           singleQuestion: this.singleQuestion,
           multipleQuestion: this.multipleQuestion,

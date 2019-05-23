@@ -55,6 +55,7 @@
       </div>
         <div class="mt20" v-if="!isShow">
             <el-button type="primary" @click="create">添加</el-button>
+            <el-button type="warning" @click="resetData">重置</el-button>
         </div>
     </div>
 </template>
@@ -63,6 +64,7 @@
 import { mapGetters } from "vuex";
 import { post,get } from "../util/http.js";
 import {getRandomStr} from '../util/index.js'
+import storage from "good-storage";
 export default {
   data() {
     return {
@@ -75,7 +77,8 @@ export default {
       // 问答题
       answerQuestion: [],
       checkList:[],
-      questionType:'常识'
+      questionType:'常识',
+      isSave: 0
     };
   },
   methods: {
@@ -323,6 +326,9 @@ export default {
       this.multipleQuestion = [];
       this.judgementQuestion = [];
       this.answerQuestion = [];
+      this.questionType  = '常识'
+      this.checkList = []
+      storage.remove('AddQuestion')
     },
     async downLoadTemplate(){
       try {
@@ -335,6 +341,49 @@ export default {
             message:error.toString()
           })
       }
+    },
+    back(cb) {
+      if (
+        this.singleQuestion.length == 0 &&
+        this.multipleQuestion.length == 0 &&
+        this.judgementQuestion.length == 0 &&
+        this.answerQuestion.length == 0
+      ) {
+        if (cb && typeof cb == "function") {
+          cb();
+        }
+      } else {
+        this.openMessageBox(cb);
+      }
+    },
+    openMessageBox(cb) {
+      this.$confirm("试题还没保存, 是否放弃提交并退出", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          if (cb && typeof cb == "function") {
+            cb();
+          }
+        })
+        .catch(() => {});
+    },
+  },
+  beforeRouteLeave(to, from, next) {
+    this.back(() => {
+        next();
+      });
+  },
+  created(){
+    let obj = storage.get('AddItemBank')
+    if(obj){
+      obj.singleQuestion && (this.singleQuestion = obj.singleQuestion)
+    obj.multipleQuestion && (this.multipleQuestion = obj.multipleQuestion)
+    obj.judgementQuestion && (this.judgementQuestion = obj.judgementQuestion)
+    obj.answerQuestion && (this.answerQuestion = obj.answerQuestion)
+    obj.questionType && (this.questionType = obj.questionType)
+    obj.checkList && (this.checkList = obj.checkList)
     }
   },
   computed: {
@@ -346,6 +395,51 @@ export default {
         this.answerQuestion.length == 0
     }
   },
+  watch: {
+    singleQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    multipleQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    judgementQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    answerQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    checkList:{
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    questionType(){
+      this.isSave++
+    },
+    isSave() {
+      storage.set('AddItemBank', {
+        singleQuestion: this.singleQuestion,
+        multipleQuestion: this.multipleQuestion,
+        judgementQuestion: this.judgementQuestion,
+        answerQuestion: this.answerQuestion,
+        questionType: this.questionType,
+        checkList: this.checkList
+      });
+    }
+  }
 }
 </script>
 

@@ -64,6 +64,7 @@
         </div>
         <div class="mt20">
             <el-button type="primary" @click="create">创建</el-button>
+            <el-button type="warning" @click="resetData">重置</el-button>
         </div>
     </div>
 </template>
@@ -72,6 +73,7 @@
 import { mapGetters } from "vuex";
 import { post,get } from "../util/http.js";
 import {getRandomStr} from '../util/index.js'
+import storage from "good-storage";
 export default {
   data() {
     return {
@@ -89,7 +91,8 @@ export default {
       // 问答题
       answerQuestion: [],
       checkList:['管理员','小学生','初中生','高中生','大学生','教师','游客','其他'],
-      questionType:'常识'
+      questionType:'常识',
+      isSave: 0
     };
   },
   created(){
@@ -99,6 +102,17 @@ export default {
       this.multipleQuestion = params.multiple
       this.judgementQuestion = params.judgement
       this.answerQuestion = params.answer
+    }else{
+      let obj = storage.get('AddQuestion')
+      if(obj){
+        obj.singleQuestion && (this.singleQuestion = obj.singleQuestion)
+      obj.multipleQuestion && (this.multipleQuestion = obj.multipleQuestion)
+      obj.judgementQuestion && (this.judgementQuestion = obj.judgementQuestion)
+      obj.answerQuestion && (this.answerQuestion = obj.answerQuestion)
+      obj.questionTitle&& (this.questionTitle = obj.questionTitle)
+      obj.questionType && (this.questionType = obj.questionType)
+      obj.checkList && (this.checkList = obj.checkList)
+      }
     }
   },
   methods: {
@@ -323,7 +337,7 @@ export default {
         this.singleQuestion.length == 0 &&
         this.multipleQuestion.length == 0 &&
         this.judgementQuestion.length == 0 &&
-        this.answerQuestion == 0
+        this.answerQuestion.length == 0
       ) {
         if (cb && typeof cb == "function") {
           cb();
@@ -333,7 +347,7 @@ export default {
       }
     },
     openMessageBox(cb) {
-      this.$confirm("试卷还没保存, 是否放弃保存并退出", "提示", {
+      this.$confirm("试卷还没保存, 是否放弃提交并退出", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -414,6 +428,9 @@ export default {
       this.multipleQuestion = [];
       this.judgementQuestion = [];
       this.answerQuestion = [];
+      this.questionType  = '常识'
+      this.checkList = ['管理员','小学生','初中生','高中生','大学生','教师','游客','其他']
+      storage.remove('AddQuestion')
     },
     async downLoadTemplate(){
       try {
@@ -435,6 +452,58 @@ export default {
     this.back(() => {
         next();
       });
+  },
+  watch: {
+    singleQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    multipleQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    judgementQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    answerQuestion: {
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    questionTitle:{
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    checkList:{
+      deep: true,
+      handler: function(newVal) {
+        this.isSave++;
+      }
+    },
+    questionType(){
+      this.isSave++
+    },
+    isSave() {
+      storage.set('AddQuestion', {
+        singleQuestion: this.singleQuestion,
+        multipleQuestion: this.multipleQuestion,
+        judgementQuestion: this.judgementQuestion,
+        answerQuestion: this.answerQuestion,
+        questionTitle: this.questionTitle,
+        questionType: this.questionType,
+        checkList: this.checkList
+      });
+    }
   }
 };
 </script>
