@@ -38,7 +38,11 @@
       <el-table :data="userLIst" style="width: 100%">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop="name" align="center" label="用户姓名"></el-table-column>
-        <el-table-column prop="email" :show-overflow-tooltip="true" align="center" label="邮箱"></el-table-column>
+        <el-table-column prop="email" :show-overflow-tooltip="true" align="center" label="邮箱">
+          <template slot-scope="scope">
+            <div>{{scope.row.email.includes('@')?scope.row.email:'无(github用户)'}}</div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="violationCount"
           :show-overflow-tooltip="true"

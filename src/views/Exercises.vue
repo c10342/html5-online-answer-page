@@ -267,7 +267,8 @@ export default {
           multipleCount: this.multipleCount,
           judgementCount: this.judgementCount,
           answerCount: this.answerCount,
-          questionType: this.questionType
+          questionType: this.questionType,
+          checkList:this.userInfo.identity
         };
         const result = await get("/api/questions/createExercises", params);
         if (result.statusCode == 200) {
