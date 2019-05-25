@@ -1,6 +1,6 @@
 {
-  "name": "html-client",
-  "short_name": "html-client",
+  "name": "答题系统",
+  "short_name": "答题系统",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

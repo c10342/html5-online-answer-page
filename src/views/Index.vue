@@ -1,6 +1,8 @@
 <template>
-  <div class="index">
-    <HeadNav></HeadNav>
+  <div class="index" ref="fullScreen" @fullscreenchange="fullscreenchange">
+    <HeadNav 
+    :message="message" 
+    @fullScreen="fullScreen"></HeadNav>
     <LeftMenu></LeftMenu>
     <div class="rightContainer">
       <router-view></router-view>
@@ -12,27 +14,82 @@
 import HeadNav from "../components/HeadNav";
 import LeftMenu from "../components/LeftMenu";
 import { mapGetters } from "vuex";
-import { routes } from "../router.js";
+// import { routes } from "../router.js";
 
 export default {
   name: "index",
+  data() {
+    return {
+      isFullScreen: false,
+      message: "全屏",
+    };
+  },
   components: {
     HeadNav,
     LeftMenu
   },
-  created() {
-    let jurisdiction = this.userInfo.jurisdiction;
-    let arr = [];
-    routes.forEach(element => {
-      if (jurisdiction.includes(element.type)) {
-        arr.push(element);
+  methods: {
+    fullScreen() {
+      if (this.isFullScreen) {
+        this.exitFullscreen()
+      } else {
+        this.launchFullScreen(this.$refs.fullScreen)
       }
-    });
-    Array.prototype.push.apply(this.$router.options.routes[2].children, arr);
-    this.$router.addRoutes([this.$router.options.routes[2]]);
+    },
+    exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozExitFullScreen) {
+        document.mozExitFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    },
+    launchFullScreen(element) { 
+      if(element.requestFullscreen) { 
+      element.requestFullscreen(); 
+      } else if(element.mozRequestFullScreen) { 
+      element.mozRequestFullScreen(); 
+      } else if(element.webkitRequestFullscreen) { 
+      element.webkitRequestFullscreen(); 
+      } else if(element.msRequestFullscreen) { 
+      element.msRequestFullscreen(); 
+      } 
+    },
+    fullscreenchange(e) {
+      this.$nextTick(()=>{
+        let isFullscreen =
+        document.webkitIsFullScreen ||
+        document.mozFullScreen ||
+        document.msFullScreen ||
+        document.fullScreen ||
+        window.fullScreen;
+      this.isFullScreen = isFullscreen ? true : false;
+      })
+    },
   },
+  // created() {
+  //   let jurisdiction = this.userInfo.jurisdiction;
+  //   let arr = [];
+  //   routes.forEach(element => {
+  //     if (jurisdiction.includes(element.type)) {
+  //       arr.push(element);
+  //     }
+  //   });
+  //   Array.prototype.push.apply(this.$router.options.routes[2].children, arr);
+  //   this.$router.addRoutes([this.$router.options.routes[2]]);
+  // },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo"]),
+  },
+  watch: {
+    isFullScreen(newVal) {
+      if (newVal) {
+        this.message = "退出全屏";
+      } else {
+        this.message = "全屏";
+      }
+    }
   }
 };
 </script>
@@ -51,5 +108,6 @@ export default {
   overflow: auto;
   background-color: white;
 }
+
 </style>
 

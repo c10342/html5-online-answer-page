@@ -1,6 +1,10 @@
 import storage from 'good-storage'
+import cookie from 'js-cookie'
 
-const userInfo = storage.session.get('userInfo',{})
+let userInfo = cookie.getJSON('userInfo')
+if(!userInfo){
+    userInfo = storage.session.get('userInfo',{})
+}
 
 const state = {
     userInfo

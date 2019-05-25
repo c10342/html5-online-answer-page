@@ -26,6 +26,18 @@
     ></Judgement>
     <!-- 简答题 -->
     <Answer v-if="answerQuestion.length" :isAnswer="isAnswer" :answerQuestion="answerQuestion"></Answer>
+    <div class="mt20 flex-row align-items">
+      <el-tooltip :content="name==0?'不匿名':'匿名'" placement="top">
+        <el-switch
+          v-model="name"
+          active-color="#13ce66"
+          inactive-color="#ccc"
+          :active-value="1"
+          :inactive-value="0">
+        </el-switch>
+      </el-tooltip>
+      <p class="font16 ml10">匿名</p>
+    </div>
     <div class="mt20">
       <el-button type="primary" @click="submit">提交</el-button>
       <el-button type="success" @click="goBack">返回</el-button>
@@ -56,7 +68,8 @@ export default {
       isCanGoback: false,
       questionType: "",
       leaveCount: 0, //鼠标离开窗口次数
-      isSave: 0
+      isSave: 0,
+      name:0
     };
   },
   methods: {
@@ -120,7 +133,7 @@ export default {
         params.title = this.title;
         params.answer = answer;
         // 答题者的用户名
-        params.userName = this.userInfo.name;
+        params.userName = this.name==0?this.userInfo.name:'匿名用户';
         // 答题者id
         params.userId = this.userInfo._id;
         params.questionId = this.$route.params.id;

@@ -1,11 +1,14 @@
 <template>
     <header class="head-nav">
         <el-row>
-            <el-col :span="6" class='logo-container'>
+            <el-col :span="4" class='logo-container'>
                 <img src="../assets/logo.png" class='logo' alt="">
                 <span class='title'>在线答题系统</span>
             </el-col>
-            <el-col :span='6' class="user">
+            <el-col :span="4" class="full-screen">
+                <span @click="fullScreen">{{message}}</span>
+            </el-col>
+            <el-col :span='4' class="user">
                 <div class="userinfo">
                     <span class='username'>
                         <el-dropdown
@@ -42,8 +45,15 @@
 import { mapGetters, mapMutations } from "vuex";
 import storage from "good-storage";
 import { get } from "../util/http.js";
+import cookie from 'js-cookie'
 export default {
   name: "head-nav",
+  props:{
+    message:{
+      type:String,
+      default:'全屏'
+    }
+  },
   methods: {
     ...mapMutations(["setUserInfo"]),
     info() {
@@ -71,6 +81,9 @@ export default {
       try {
         const result = await get("/api/user/logout");
         if (result.statusCode == 200) {
+          if(cookie.get('userInfo')){
+              cookie.remove('userInfo')
+          }
           storage.session.remove("userInfo");
           this.setUserInfo({});
           this.$router.push({ name: "login" });
@@ -88,6 +101,9 @@ export default {
           showClose: true
         });
       }
+    },
+    fullScreen(){
+      this.$emit('fullScreen')
     }
   },
   computed: {
@@ -108,7 +124,14 @@ export default {
 }
 .logo-container {
   line-height: 78px;
-  min-width: 400px;
+  min-width: 300px;
+}
+.full-screen{
+  line-height: 78px;
+  font-size: 18px;
+}
+.full-screen > span {
+  cursor: pointer;
 }
 .logo {
   height: 50px;

@@ -18,6 +18,7 @@
 <script>
 import { post } from "../util/http.js";
 import { mapGetters, mapMutations } from "vuex";
+import cookie from 'js-cookie'
 export default {
   data() {
     return {
@@ -59,6 +60,9 @@ export default {
                 message: result.message,
                 type: "success"
               });
+              if(cookie.get('userInfo')){
+                cookie.set('userInfo',result.data.userInfo,{ expires: 7 })
+              }
               this.setUserInfo(result.data.userInfo);
               this.$router.push({ name: "home" });
             } else {

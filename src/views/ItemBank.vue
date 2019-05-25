@@ -1,5 +1,6 @@
 <template>
-    <div class="my-container">
+    <div id="fileContent" class="my-container">
+      <p class="mb10" style="color:red;">可拖拽文件进行上传</p>
         <el-button type="primary" @click="openFile">上传试题</el-button>
         <el-button type="success" @click="downLoadTemplate">下载试题模板</el-button>
         <input 
@@ -269,7 +270,7 @@ export default {
     },
     async upload(e) {
       try {
-        let file = e.target.files[0];
+        let file = e.dataTransfer?e.dataTransfer.files[0]:e.target.files[0];
         let name = file.name;
         let reg = /(\.(xls)|(xlsx))$/i;
         let titleName = name.replace(/(.*\/)*([^.]+).*/gi, "$2");
@@ -369,9 +370,15 @@ export default {
         })
         .catch(() => {});
     },
+    onDrop(e){
+      e.preventDefault();
+      this.upload(e)
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.back(() => {
+      const div = document.getElementById("fileContent")
+    div.removeEventListener('drag',this.onDrop)
         next();
       });
   },
@@ -385,6 +392,16 @@ export default {
     obj.questionType && (this.questionType = obj.questionType)
     obj.checkList && (this.checkList = obj.checkList)
     }
+  },
+  mounted() {
+    // 实现拖拽文件上传
+    const div = document.getElementById("fileContent");
+    div.ondragenter = div.ondragover = div.ondragleave = function() {
+      // 组织默认事件
+      return false;
+    };
+    // 释放文件
+    div.addEventListener("drop",this.onDrop);
   },
   computed: {
     ...mapGetters(["userInfo"]),

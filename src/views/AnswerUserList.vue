@@ -10,6 +10,17 @@
             </el-input>
             </div>
             <div class="flex-row flex-center min-width mt10">
+                <span class="text-nowrap pr10 pl10 font18">试卷类型 : </span>
+                <el-select clearable v-model="questionType" placeholder="请选择试卷类型">
+                <el-option label="常识" value="常识"></el-option>
+                <el-option label="交通安全" value="交通安全"></el-option>
+                <el-option label="法律知识" value="法律知识"></el-option>
+                <el-option label="问卷调查" value="问卷调查"></el-option>
+                <el-option label="在线考试" value="在线考试"></el-option>
+                <el-option label="练习题" value="练习题"></el-option>
+                </el-select>
+            </div>
+            <div class="flex-row flex-center min-width mt10">
                 <span class="text-nowrap pr10 pl10 font18">填写时间 : </span>
                 <el-date-picker
                     v-model="beginTime"
@@ -145,7 +156,8 @@ export default {
       userName: "",
       beginTime: "",
       endTime: "",
-      questionId: ""
+      questionId: "",
+      questionType:''
     };
   },
   created() {
@@ -172,6 +184,9 @@ export default {
         }
         if (this.userName) {
           params.userName = this.userName;
+        }
+        if(this.questionType){
+          params.questionType = this.questionType
         }
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;

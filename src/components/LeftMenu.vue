@@ -2,6 +2,7 @@
   <el-row class="menu_page">
     <el-col>
       <el-menu
+      unique-opened
         mode="vertical"
         background-color="#324057"
         text-color="#fff"

@@ -91,10 +91,11 @@ axios.interceptors.response.use(function (config) {
 Vue.config.productionTip = false
 
 
-// 登录权限控制
+// 权限控制
 router.beforeEach((to, from, next) => {
+  let userInfo = store.state.userInfo
   // 用户没有登录
-  if (!store.state.userInfo._id) {
+  if (!userInfo._id) {
     // 登录注册页面不需要登录
     if (to.name == 'login' || to.name == 'register') {
       next()
@@ -104,7 +105,20 @@ router.beforeEach((to, from, next) => {
       })
     }
   } else { //用户已经登录了
-    next()
+    let flag = to.meta.flag
+    if(flag){
+      let type = to.meta.type
+      const index = userInfo.jurisdiction.includes(type)
+      if(index){
+        next()
+      }else{
+        next({
+          name:'notFound'
+        })
+      }
+    }else{
+      next()
+    }
   }
 })
 

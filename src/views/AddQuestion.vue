@@ -1,78 +1,76 @@
 <template>
-    <div class="my-container">
-        <el-button type="primary" @click="openFile">上传试卷</el-button>
-        <el-button type="success" @click="downLoadTemplate">下载试卷模板</el-button>
-        <input 
-        ref="pathClear"
-        type="file" 
-        style="display:none" 
-        id="file" 
-        @change="upload"
-        accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-        <div class="mt20 flex-row align-items">
-          <h1 style="font-size:20px;">试卷类型：</h1>
-          <el-select v-model="questionType" placeholder="请选择试卷类型">
-          <el-option label="常识" value="常识"></el-option>
-          <el-option label="交通安全" value="交通安全"></el-option>
-          <el-option label="法律知识" value="法律知识"></el-option>
-          <el-option label="问卷调查" value="问卷调查"></el-option>
-          <el-option label="在线考试" value="在线考试"></el-option>
-          <el-option label="练习题" value="练习题"></el-option>
-          <el-option label="其他" value="其他"></el-option>
-        </el-select>
-        </div>
-        <div class="mt20">
-            <div class="flex-row flex-center">
-                <span class="text-nowrap mr10 font20">试题名称 :</span>
-                <el-input v-model.trim="questionTitle.name" clearable placeholder="请输入试题名称"></el-input>
-            </div>
-            <div style="margin:10px 0 0 100px;">
-                <span style="color:red;">{{questionTitle.message}}</span>
-            </div>
-        </div>
-        <!-- 单选题 -->
-        <Single 
-        :singleQuestion='singleQuestion'
-        @addSingle='addSingle' 
-        @deleteItem='deleteItem'></Single>
-        <!-- 多选题 -->
-        <Multiple 
-        :multipleQuestion='multipleQuestion'
-        @addMultiple='addMultiple' 
-        @deleteItem='deleteItem'></Multiple>
-        <!-- 判断题 -->
-        <Judgement 
-        :judgementQuestion='judgementQuestion'
-        @addJudgement='addJudgement' 
-        @deleteItem='deleteItem'></Judgement>
-        <!-- 简答题 -->
-        <Answer 
-        :answerQuestion='answerQuestion'
-        @addAnswer='addAnswer' 
-        @deleteItem='deleteItem'></Answer>
-        <div class="mt20">
-          <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
-          <el-checkbox-group v-model="checkList">
-          <el-checkbox label="小学生"></el-checkbox>
-          <el-checkbox label="初中生"></el-checkbox>
-          <el-checkbox label="高中生"></el-checkbox>
-          <el-checkbox label="大学生"></el-checkbox>
-          <el-checkbox label="教师"></el-checkbox>
-          <el-checkbox label="游客"></el-checkbox>
-          <el-checkbox label="其他"></el-checkbox>
-        </el-checkbox-group>
-        </div>
-        <div class="mt20">
-            <el-button type="primary" @click="create">创建</el-button>
-            <el-button type="warning" @click="resetData">重置</el-button>
-        </div>
+  <div id="fileContent" class="my-container">
+    <p class="mb10" style="color:red;">可拖拽文件进行上传</p>
+    <el-button type="primary" @click="openFile">上传试卷</el-button>
+    <el-button type="success" @click="downLoadTemplate">下载试卷模板</el-button>
+    <input
+      ref="pathClear"
+      type="file"
+      style="display:none"
+      id="file"
+      @change="upload"
+      accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    >
+    <div class="mt20 flex-row align-items">
+      <h1 style="font-size:20px;">试卷类型：</h1>
+      <el-select v-model="questionType" placeholder="请选择试卷类型">
+        <el-option label="常识" value="常识"></el-option>
+        <el-option label="交通安全" value="交通安全"></el-option>
+        <el-option label="法律知识" value="法律知识"></el-option>
+        <el-option label="问卷调查" value="问卷调查"></el-option>
+        <el-option label="在线考试" value="在线考试"></el-option>
+        <el-option label="练习题" value="练习题"></el-option>
+        <el-option label="其他" value="其他"></el-option>
+      </el-select>
     </div>
+    <div class="mt20">
+      <div class="flex-row flex-center">
+        <span class="text-nowrap mr10 font20">试题名称 :</span>
+        <el-input v-model.trim="questionTitle.name" clearable placeholder="请输入试题名称"></el-input>
+      </div>
+      <div style="margin:10px 0 0 100px;">
+        <span style="color:red;">{{questionTitle.message}}</span>
+      </div>
+    </div>
+    <!-- 单选题 -->
+    <Single :singleQuestion="singleQuestion" @addSingle="addSingle" @deleteItem="deleteItem"></Single>
+    <!-- 多选题 -->
+    <Multiple
+      :multipleQuestion="multipleQuestion"
+      @addMultiple="addMultiple"
+      @deleteItem="deleteItem"
+    ></Multiple>
+    <!-- 判断题 -->
+    <Judgement
+      :judgementQuestion="judgementQuestion"
+      @addJudgement="addJudgement"
+      @deleteItem="deleteItem"
+    ></Judgement>
+    <!-- 简答题 -->
+    <Answer :answerQuestion="answerQuestion" @addAnswer="addAnswer" @deleteItem="deleteItem"></Answer>
+    <div class="mt20">
+      <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
+      <el-checkbox-group v-model="checkList">
+        <el-checkbox label="小学生"></el-checkbox>
+        <el-checkbox label="初中生"></el-checkbox>
+        <el-checkbox label="高中生"></el-checkbox>
+        <el-checkbox label="大学生"></el-checkbox>
+        <el-checkbox label="教师"></el-checkbox>
+        <el-checkbox label="游客"></el-checkbox>
+        <el-checkbox label="其他"></el-checkbox>
+      </el-checkbox-group>
+    </div>
+    <div class="mt20">
+      <el-button type="primary" @click="create">创建</el-button>
+      <el-button type="warning" @click="resetData">重置</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { post,get } from "../util/http.js";
-import {getRandomStr} from '../util/index.js'
+import { post, get } from "../util/http.js";
+import { getRandomStr } from "../util/index.js";
 import storage from "good-storage";
 export default {
   data() {
@@ -90,30 +88,50 @@ export default {
       judgementQuestion: [],
       // 问答题
       answerQuestion: [],
-      checkList:['管理员','小学生','初中生','高中生','大学生','教师','游客','其他'],
-      questionType:'常识',
+      checkList: [
+        "管理员",
+        "小学生",
+        "初中生",
+        "高中生",
+        "大学生",
+        "教师",
+        "游客",
+        "其他"
+      ],
+      questionType: "常识",
       isSave: 0
     };
   },
-  created(){
-    let params = this.$route.params
-    if(params.flag){
-      this.singleQuestion = params.single
-      this.multipleQuestion = params.multiple
-      this.judgementQuestion = params.judgement
-      this.answerQuestion = params.answer
-    }else{
-      let obj = storage.get('AddQuestion')
-      if(obj){
-        obj.singleQuestion && (this.singleQuestion = obj.singleQuestion)
-      obj.multipleQuestion && (this.multipleQuestion = obj.multipleQuestion)
-      obj.judgementQuestion && (this.judgementQuestion = obj.judgementQuestion)
-      obj.answerQuestion && (this.answerQuestion = obj.answerQuestion)
-      obj.questionTitle&& (this.questionTitle = obj.questionTitle)
-      obj.questionType && (this.questionType = obj.questionType)
-      obj.checkList && (this.checkList = obj.checkList)
+  created() {
+    let params = this.$route.params;
+    if (params.flag) {
+      this.singleQuestion = params.single;
+      this.multipleQuestion = params.multiple;
+      this.judgementQuestion = params.judgement;
+      this.answerQuestion = params.answer;
+    } else {
+      let obj = storage.get("AddQuestion");
+      if (obj) {
+        obj.singleQuestion && (this.singleQuestion = obj.singleQuestion);
+        obj.multipleQuestion && (this.multipleQuestion = obj.multipleQuestion);
+        obj.judgementQuestion &&
+          (this.judgementQuestion = obj.judgementQuestion);
+        obj.answerQuestion && (this.answerQuestion = obj.answerQuestion);
+        obj.questionTitle && (this.questionTitle = obj.questionTitle);
+        obj.questionType && (this.questionType = obj.questionType);
+        obj.checkList && (this.checkList = obj.checkList);
       }
     }
+  },
+  mounted() {
+    // 实现拖拽文件上传
+    const div = document.getElementById("fileContent");
+    div.ondragenter = div.ondragover = div.ondragleave = function() {
+      // 组织默认事件
+      return false;
+    };
+    // 释放文件
+    div.addEventListener("drop",this.onDrop);
   },
   methods: {
     addSingle() {
@@ -277,21 +295,21 @@ export default {
           answer: answerAnswer,
           count: this.answerQuestion.length
         };
-        if(this.$route.params.flag){
-          params.flag = '1'
+        if (this.$route.params.flag) {
+          params.flag = "1";
         }
         // 发布者的用户名
         params.userName = this.userInfo.name;
         // 发布者id
         params.userId = this.userInfo._id;
 
-        if(this.checkList.includes('管理员')){
-          params.checkList = JSON.stringify(this.checkList)
-        }else{
-          params.checkList = JSON.stringify([...this.checkList,'管理员'])
+        if (this.checkList.includes("管理员")) {
+          params.checkList = JSON.stringify(this.checkList);
+        } else {
+          params.checkList = JSON.stringify([...this.checkList, "管理员"]);
         }
 
-        params.questionType = this.questionType
+        params.questionType = this.questionType;
 
         try {
           const result = await post("/api/questions/addQuestion", params);
@@ -301,7 +319,7 @@ export default {
               message: result.message,
               showClose: true
             });
-            this.resetData()
+            this.resetData();
           } else {
             this.$message({
               type: "warning",
@@ -323,6 +341,10 @@ export default {
           showClose: true
         });
       }
+    },
+    onDrop(e){
+      e.preventDefault();
+      this.upload(e)
     },
     deleteItem({ key: item, index }) {
       this[item].splice(index, 1);
@@ -364,7 +386,7 @@ export default {
     },
     async upload(e) {
       try {
-        let file = e.target.files[0];
+        let file = e.dataTransfer?e.dataTransfer.files[0]:e.target.files[0];
         let name = file.name;
         let reg = /(\.(xls)|(xlsx))$/i;
         let titleName = name.replace(/(.*\/)*([^.]+).*/gi, "$2");
@@ -415,8 +437,8 @@ export default {
           message: error.toString(),
           showClose: true
         });
-      }finally{
-        this.$refs.pathClear.value =''
+      } finally {
+        this.$refs.pathClear.value = "";
       }
     },
     resetData() {
@@ -428,20 +450,29 @@ export default {
       this.multipleQuestion = [];
       this.judgementQuestion = [];
       this.answerQuestion = [];
-      this.questionType  = '常识'
-      this.checkList = ['管理员','小学生','初中生','高中生','大学生','教师','游客','其他']
-      storage.remove('AddQuestion')
+      this.questionType = "常识";
+      this.checkList = [
+        "管理员",
+        "小学生",
+        "初中生",
+        "高中生",
+        "大学生",
+        "教师",
+        "游客",
+        "其他"
+      ];
+      storage.remove("AddQuestion");
     },
-    async downLoadTemplate(){
+    async downLoadTemplate() {
       try {
-        let url = '/api/downLoad/downLoadTemplate'
-        window.open(url)
+        let url = "/api/downLoad/downLoadTemplate";
+        window.open(url);
       } catch (error) {
         this.$message({
-            showClose:true,
-            type:'error',
-            message:error.toString()
-          })
+          showClose: true,
+          type: "error",
+          message: error.toString()
+        });
       }
     }
   },
@@ -450,8 +481,10 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     this.back(() => {
-        next();
-      });
+      const div = document.getElementById("fileContent")
+      div.removeEventListener('drag',this.onDrop)
+      next();
+    });
   },
   watch: {
     singleQuestion: {
@@ -478,23 +511,23 @@ export default {
         this.isSave++;
       }
     },
-    questionTitle:{
+    questionTitle: {
       deep: true,
       handler: function(newVal) {
         this.isSave++;
       }
     },
-    checkList:{
+    checkList: {
       deep: true,
       handler: function(newVal) {
         this.isSave++;
       }
     },
-    questionType(){
-      this.isSave++
+    questionType() {
+      this.isSave++;
     },
     isSave() {
-      storage.set('AddQuestion', {
+      storage.set("AddQuestion", {
         singleQuestion: this.singleQuestion,
         multipleQuestion: this.multipleQuestion,
         judgementQuestion: this.judgementQuestion,

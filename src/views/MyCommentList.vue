@@ -2,6 +2,14 @@
     <div class="my-container">
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
+                <span class="text-nowrap pr10 pl10 font18">试卷标题 : </span>
+                <el-input
+                    v-model="title"
+                    placeholder="请输入试卷标题"
+                    clearable>
+                </el-input>
+            </div>
+            <div class="flex-row flex-center min-width mt10">
                 <span class="text-nowrap pr10 pl10 font18">评论内容 : </span>
                 <el-input
                     v-model="content"
@@ -83,7 +91,8 @@ export default {
       content: "",
       userName: "",
       beginTime: "",
-      endTime: ""
+      endTime: "",
+      title:''
     };
   },
   created() {
@@ -109,6 +118,9 @@ export default {
         }
         if (this.content) {
           params.content = this.content;
+        }
+        if(this.title){
+          params.title = this.title
         }
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;

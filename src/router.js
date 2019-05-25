@@ -36,7 +36,12 @@ export default new Router({
   routes: [{
     path: '/',
     name: '/',
-    redirect: '/login'
+    redirect: '/home'
+  },
+  {
+    path: '/index.html',
+    name: '/index.html',
+    redirect: '/home'
   },
   {
     path: '/bg',
@@ -112,7 +117,123 @@ export default new Router({
       name: 'answerUserList',
       component: AnswerUserList
     },
-
+    {
+      path: '/consultQuestions',
+      name: 'consultQuestions',
+      component: ConsultQuestions,
+      type: '1-1',
+      meta:{
+        flag:true,
+        type: '1-1'
+      }
+    },
+    {
+      path: '/addQuestion',
+      name: 'addQuestion',
+      component: AddQuestion,
+      type: '1-2',
+      meta:{
+        flag:true,
+        type: '1-2'
+      }
+    }, {
+      path: '/publishedQuestions',
+      name: 'publishedQuestions',
+      component: PublishedQuestions,
+      type: '1-3',
+      meta:{
+        flag:true,
+        type: '1-3'
+      }
+    }, {
+      path: '/answeredList',
+      name: 'answeredList',
+      component: AnsweredList,
+      type: '1-4',
+      meta:{
+        flag:true,
+        type: '1-4'
+      }
+    }, {
+      path: '/assembleQuestion',
+      name: 'assembleQuestion',
+      component: AssembleQuestion,
+      type: '2-1',
+      meta:{
+        flag:true,
+        type: '2-1'
+      }
+    },
+    {
+      path: '/itemBank',
+      name: 'itemBank',
+      component: ItemBank,
+      type: '2-2',
+      meta:{
+        flag:true,
+        type: '2-2'
+      }
+    },
+    {
+      path: '/myMistake',
+      name: 'myMistake',
+      component: MyMistake,
+      type: '2-3',
+      meta:{
+        flag:true,
+        type: '2-3'
+      }
+    },
+    {
+      path: '/exercises',
+      name: 'exercises',
+      component: Exercises,
+      type: '2-4',
+      meta:{
+        flag:true,
+        type: '2-4'
+      }
+    },
+    {
+      path: '/questionsStatistics',
+      name: 'questionsStatistics',
+      component: QuestionsStatistics,
+      type: '3',
+      meta:{
+        flag:true,
+        type: '3'
+      }
+    },
+    {
+      path: '/myCommentList',
+      name: 'myCommentList',
+      component: MyCommentList,
+      type: '4',
+      meta:{
+        flag:true,
+        type: '4'
+      }
+    },
+    {
+      path: '/collectionQuestion',
+      name: 'collectionQuestion',
+      component: CollectionQuestion,
+      type: '5',
+      meta:{
+        flag:true,
+        type: '5'
+      }
+    },
+    {
+      path: '/userMessage',
+      name: 'userMessage',
+      component: UserMessage,
+      type: '6',
+      meta:{
+        flag:true,
+        type: '6'
+      }
+    },
     ]
   },
   {
@@ -123,77 +244,77 @@ export default new Router({
   ]
 })
 
-export const routes = [
-  {
-    path: '/consultQuestions',
-    name: 'consultQuestions',
-    component: ConsultQuestions,
-    type: '1-1'
-  },
-  {
-    path: '/addQuestion',
-    name: 'addQuestion',
-    component: AddQuestion,
-    type: '1-2'
-  }, {
-    path: '/publishedQuestions',
-    name: 'publishedQuestions',
-    component: PublishedQuestions,
-    type: '1-3'
-  }, {
-    path: '/answeredList',
-    name: 'answeredList',
-    component: AnsweredList,
-    type: '1-4'
-  }, {
-    path: '/assembleQuestion',
-    name: 'assembleQuestion',
-    component: AssembleQuestion,
-    type: '2-1'
-  },
-  {
-    path: '/itemBank',
-    name: 'itemBank',
-    component: ItemBank,
-    type: '2-2'
-  },
-  {
-    path: '/myMistake',
-    name: 'myMistake',
-    component: MyMistake,
-    type: '2-3'
-  },
-  {
-    path: '/exercises',
-    name: 'exercises',
-    component: Exercises,
-    type: '2-4'
-  },
-  {
-    path: '/questionsStatistics',
-    name: 'questionsStatistics',
-    component: QuestionsStatistics,
-    type: '3'
-  },
-  {
-    path: '/myCommentList',
-    name: 'myCommentList',
-    component: MyCommentList,
-    type: '4'
-  },
-  {
-    path: '/collectionQuestion',
-    name: 'collectionQuestion',
-    component: CollectionQuestion,
-    type: '5'
-  },
-  {
-    path: '/userMessage',
-    name: 'userMessage',
-    component: UserMessage,
-    type: '6'
-  },
-]
+// export const routes = [
+//   {
+//     path: '/consultQuestions',
+//     name: 'consultQuestions',
+//     component: ConsultQuestions,
+//     type: '1-1'
+//   },
+//   {
+//     path: '/addQuestion',
+//     name: 'addQuestion',
+//     component: AddQuestion,
+//     type: '1-2'
+//   }, {
+//     path: '/publishedQuestions',
+//     name: 'publishedQuestions',
+//     component: PublishedQuestions,
+//     type: '1-3'
+//   }, {
+//     path: '/answeredList',
+//     name: 'answeredList',
+//     component: AnsweredList,
+//     type: '1-4'
+//   }, {
+//     path: '/assembleQuestion',
+//     name: 'assembleQuestion',
+//     component: AssembleQuestion,
+//     type: '2-1'
+//   },
+//   {
+//     path: '/itemBank',
+//     name: 'itemBank',
+//     component: ItemBank,
+//     type: '2-2'
+//   },
+//   {
+//     path: '/myMistake',
+//     name: 'myMistake',
+//     component: MyMistake,
+//     type: '2-3'
+//   },
+//   {
+//     path: '/exercises',
+//     name: 'exercises',
+//     component: Exercises,
+//     type: '2-4'
+//   },
+//   {
+//     path: '/questionsStatistics',
+//     name: 'questionsStatistics',
+//     component: QuestionsStatistics,
+//     type: '3'
+//   },
+//   {
+//     path: '/myCommentList',
+//     name: 'myCommentList',
+//     component: MyCommentList,
+//     type: '4'
+//   },
+//   {
+//     path: '/collectionQuestion',
+//     name: 'collectionQuestion',
+//     component: CollectionQuestion,
+//     type: '5'
+//   },
+//   {
+//     path: '/userMessage',
+//     name: 'userMessage',
+//     component: UserMessage,
+//     type: '6'
+//   },
+// ]
 
 // export default new Router({
 //   mode: 'history',

@@ -25,6 +25,18 @@
         <el-input v-model="email" placeholder="请输入邮箱" clearable></el-input>
       </div>
       <div class="flex-row flex-center min-width mt10">
+        <span class="text-nowrap pr10 pl10 font18">身份 :</span>
+        <el-select v-model="identity" placeholder="请选择身份">
+          <el-option label="小学生" value="小学生"></el-option>
+          <el-option label="初中生" value="初中生"></el-option>
+          <el-option label="高中生" value="高中生"></el-option>
+          <el-option label="大学生" value="大学生"></el-option>
+          <el-option label="教师" value="教师"></el-option>
+          <el-option label="游客" value="游客"></el-option>
+          <el-option label="其他" value="其他"></el-option>
+        </el-select>
+      </div>
+      <div class="flex-row flex-center min-width mt10">
         <span class="text-nowrap pr10 pl10 font18">发布时间 :</span>
         <el-date-picker v-model="beginTime" type="date" placeholder="选择日期"></el-date-picker>
         <span class="pl10 pr10 font18">--</span>
@@ -43,6 +55,12 @@
             <div>{{scope.row.email.includes('@')?scope.row.email:'无(github用户)'}}</div>
           </template>
         </el-table-column>
+        <el-table-column
+          prop="identity"
+          :show-overflow-tooltip="true"
+          align="center"
+          label="身份"
+        ></el-table-column>
         <el-table-column
           prop="violationCount"
           :show-overflow-tooltip="true"
@@ -149,7 +167,8 @@ export default {
         }
       ],
       selectProps: [],
-      selectUserInfo: {}
+      selectUserInfo: {},
+      identity:''
     };
   },
   created() {
@@ -178,6 +197,9 @@ export default {
         }
         if (this.email) {
           params.email = this.email;
+        }
+        if(this.identity){
+          params.identity = this.identity
         }
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;

@@ -13,6 +13,12 @@
       <el-form-item>
         <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登 录</el-button>
       </el-form-item>
+      <div class="login-free flex-row">
+        <el-checkbox 
+        v-model="checked">
+        七天内免登录
+        </el-checkbox>
+      </div>
       <div class="login-type">
         <div class="github">
           <p>
@@ -35,10 +41,12 @@
 import { mapMutations } from "vuex";
 import { post, get } from "../util/http.js";
 import { clientID, redirect_uri } from "../util/config.js";
+import cookie from 'js-cookie'
 export default {
   name: "login",
   data() {
     return {
+      checked:true,
       loginUser: {
         email: "",
         password: ""
@@ -103,6 +111,9 @@ export default {
                 message: result.message,
                 type: "success"
               });
+              if(this.checked){
+                cookie.set('userInfo',result.data.userInfo,{ expires: 7 })
+              }
               this.setUserInfo(result.data.userInfo);
               this.$router.push({
                 name: "home"
@@ -186,6 +197,11 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.login-free{
+  margin-bottom: 10px;
+  margin-left: 60px;
 }
 </style>
 

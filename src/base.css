@@ -38,6 +38,20 @@
   color: #fff;
 }
 
+.form_container .el-checkbox__inner {
+  width: 17px;
+  height: 17px;
+}
+
+.form_container .el-checkbox__inner::after {
+  left: 6px;
+  top: 2px;
+}
+
+.form_container .el-checkbox__label {
+  color: #fff;
+  font-size: 14px;
+}
 
 .deleteItem {
   font-size: 18px;
