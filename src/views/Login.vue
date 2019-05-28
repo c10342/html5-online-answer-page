@@ -14,16 +14,13 @@
         <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登 录</el-button>
       </el-form-item>
       <div class="login-free flex-row">
-        <el-checkbox 
-        v-model="checked">
-        七天内免登录
-        </el-checkbox>
+        <el-checkbox v-model="checked">七天内免登录</el-checkbox>
       </div>
       <div class="login-type">
         <div class="github">
           <p>
             使用
-            <a :href="href">github</a>登录
+            <a :href="href" target='_self'>github</a>登录
           </p>
         </div>
         <div class="tiparea">
@@ -41,12 +38,12 @@
 import { mapMutations } from "vuex";
 import { post, get } from "../util/http.js";
 import { clientID, redirect_uri } from "../util/config.js";
-import cookie from 'js-cookie'
+import cookie from "js-cookie";
 export default {
   name: "login",
   data() {
     return {
-      checked:true,
+      checked: true,
       loginUser: {
         email: "",
         password: ""
@@ -78,6 +75,9 @@ export default {
             message: userInfo.message,
             type: "success"
           });
+          if (this.checked) {
+            cookie.set("userInfo", userInfo.data.userInfo, { expires: 7 });
+          }
           this.setUserInfo(userInfo.data.userInfo);
           this.$router.push({
             name: "home"
@@ -111,8 +111,8 @@ export default {
                 message: result.message,
                 type: "success"
               });
-              if(this.checked){
-                cookie.set('userInfo',result.data.userInfo,{ expires: 7 })
+              if (this.checked) {
+                cookie.set("userInfo", result.data.userInfo, { expires: 7 });
               }
               this.setUserInfo(result.data.userInfo);
               this.$router.push({
@@ -199,7 +199,7 @@ export default {
   justify-content: space-between;
 }
 
-.login-free{
+.login-free {
   margin-bottom: 10px;
   margin-left: 60px;
 }

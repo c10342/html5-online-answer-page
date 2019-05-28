@@ -72,6 +72,7 @@ import { mapGetters } from "vuex";
 import { post, get } from "../util/http.js";
 import { getRandomStr } from "../util/index.js";
 import storage from "good-storage";
+import img from '../assets/default.png'
 export default {
   data() {
     return {
@@ -120,6 +121,14 @@ export default {
         obj.questionTitle && (this.questionTitle = obj.questionTitle);
         obj.questionType && (this.questionType = obj.questionType);
         obj.checkList && (this.checkList = obj.checkList);
+
+        //消息推送
+        var n = new Notification('提示', {
+          body: '自动还原上次自动保存状态',
+          tag: 'avenstar', //代表通知的一个识别标签，相同tag时只会打开同一个通知窗口
+          icon: img,
+          requireInteraction: false //通知保持有效不自动关闭，默认为false
+        })
       }
     }
   },
@@ -173,12 +182,7 @@ export default {
       });
     },
     async create() {
-      if (
-        this.singleQuestion.length == 0 ||
-        this.multipleQuestion.length == 0 ||
-        this.judgementQuestion.length == 0 ||
-        this.answerQuestion.length == 0
-      ) {
+      if (this.isNull) {
         this.$message({
           showClose: true,
           message: "试卷每个类型必须有一道试题",
@@ -369,7 +373,7 @@ export default {
       }
     },
     openMessageBox(cb) {
-      this.$confirm("试卷还没保存, 是否放弃提交并退出", "提示", {
+      this.$confirm("试卷还没提交保存, 是否放弃提交并退出", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -477,10 +481,22 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo"]),
+    isNull(){
+      return (this.singleQuestion.length == 0 ||
+        this.multipleQuestion.length == 0 ||
+        this.judgementQuestion.length == 0 ||
+        this.answerQuestion.length == 0)
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.back(() => {
+      if(this.singleQuestion.length == 0 &&
+        this.multipleQuestion.length == 0 &&
+        this.judgementQuestion.length == 0 &&
+        this.answerQuestion.length == 0){
+          storage.remove("AddQuestion");
+        }
       const div = document.getElementById("fileContent")
       div.removeEventListener('drag',this.onDrop)
       next();

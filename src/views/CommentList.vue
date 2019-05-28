@@ -2,7 +2,7 @@
     <div class="my-container">
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
-            <span class="text-nowrap pr10 font18">评论者 : </span>
+            <span class="text-nowrap pr10 pl10 font18">评论者 : </span>
             <el-input
                 v-model="userName"
                 placeholder="请输入评论者姓名"

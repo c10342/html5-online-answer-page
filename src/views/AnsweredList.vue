@@ -18,7 +18,7 @@
         </el-dialog>
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
-            <span class="text-nowrap pr10 font18">试卷名称 : </span>
+            <span class="text-nowrap pr10 pl10 font18">试卷名称 : </span>
             <el-input
                 v-model="title"
                 placeholder="请输入试卷名称"

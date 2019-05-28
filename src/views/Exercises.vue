@@ -6,7 +6,7 @@
     </div>
     <div class="flex-row flex-wrap">
       <div class="flex-row flex-center min-width mt10">
-        <span class="text-nowrap pr10 font18">单选题数量 :</span>
+        <span class="text-nowrap pr10 pl10 font18">单选题数量 :</span>
         <el-input v-model="singleCount" placeholder="请输入单选题数量" clearable></el-input>
       </div>
       <div class="flex-row flex-center min-width mt10">
@@ -20,7 +20,7 @@
     </div>
     <div class="flex-row flex-wrap">
       <div class="flex-row flex-center min-width mt10">
-        <span class="text-nowrap pr10 font18">简答题数量 :</span>
+        <span class="text-nowrap pr10 pl10 font18">简答题数量 :</span>
         <el-input v-model="answerCount" placeholder="请输入简答题数量" clearable></el-input>
       </div>
       <div class="flex-row flex-center min-width mt10">
@@ -92,22 +92,6 @@ export default {
       let multipleAnswer = {};
       let judgementAnswer = {};
       let answerAnswer = {};
-      // // 判断单选题信息是否齐全
-      // this.singleQuestion.forEach(item => {
-      //     singleAnswer[item.id] = item.answer;
-      // });
-      // // 判断多选题信息是否齐全
-      // this.multipleQuestion.forEach(item => {   
-      //     multipleAnswer[item.id] = item.answer.sort().toString();
-      // });
-      // // 判断判断题信息是否齐全
-      // this.judgementQuestion.forEach(item => {
-      //     judgementAnswer[item.id] = item.answer;
-      // });
-      // // 判断简答题信息是否齐全
-      // this.answerQuestion.forEach(item => {
-      //     answerAnswer[item.id] = item.answer;
-      // });
 
       let s = []
       // 判断单选题是否已经完成

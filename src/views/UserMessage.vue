@@ -17,7 +17,7 @@
     </el-dialog>
     <div class="flex-row flex-wrap">
       <div class="flex-row flex-center min-width mt10">
-        <span class="text-nowrap pr10 font18">用户姓名 :</span>
+        <span class="text-nowrap pr10 pl10 font18">用户姓名 :</span>
         <el-input v-model="name" placeholder="请输入用户姓名" clearable></el-input>
       </div>
       <div class="flex-row flex-center min-width mt10">
@@ -52,7 +52,7 @@
         <el-table-column prop="name" align="center" label="用户姓名"></el-table-column>
         <el-table-column prop="email" :show-overflow-tooltip="true" align="center" label="邮箱">
           <template slot-scope="scope">
-            <div>{{scope.row.email.includes('@')?scope.row.email:'无(github用户)'}}</div>
+            <div>{{scope.row.githubId==1?scope.row.email:'无(github用户)'}}</div>
           </template>
         </el-table-column>
         <el-table-column

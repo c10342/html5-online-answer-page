@@ -2,7 +2,7 @@
     <div class="my-container">
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
-            <span class="text-nowrap pr10 font18">题目 : </span>
+            <span class="text-nowrap pr10 pl10 font18">题目 : </span>
             <el-input
                 v-model="title"
                 placeholder="请输入试卷名称"

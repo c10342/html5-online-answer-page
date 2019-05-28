@@ -1,50 +1,47 @@
 <template>
-    <div id="fileContent" class="my-container">
-      <p class="mb10" style="color:red;">可拖拽文件进行上传</p>
-        <el-button type="primary" @click="openFile">上传试题</el-button>
-        <el-button type="success" @click="downLoadTemplate">下载试题模板</el-button>
-        <input 
-        ref="pathClear"
-        type="file" 
-        style="display:none" 
-        id="file" 
-        @change="upload"
-        accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-        <div class="mt20 flex-row align-items">
-          <h1 style="font-size:20px;">试题类型：</h1>
-          <el-select v-model="questionType" placeholder="请选择试题类型">
-          <el-option label="常识" value="常识"></el-option>
-          <el-option label="交通安全" value="交通安全"></el-option>
-          <el-option label="法律知识" value="法律知识"></el-option>
-          <el-option label="问卷调查" value="问卷调查"></el-option>
-          <el-option label="在线考试" value="在线考试"></el-option>
-          <el-option label="练习题" value="练习题"></el-option>
-          <el-option label="其他" value="其他"></el-option>
-        </el-select>
-        </div>
-        <!-- 单选题 -->
-        <Single 
-        :singleQuestion='singleQuestion'
-        @addSingle='addSingle' 
-        @deleteItem='deleteItem'></Single>
-        <!-- 多选题 -->
-        <Multiple 
-        :multipleQuestion='multipleQuestion'
-        @addMultiple='addMultiple' 
-        @deleteItem='deleteItem'></Multiple>
-        <!-- 判断题 -->
-        <Judgement 
-        :judgementQuestion='judgementQuestion'
-        @addJudgement='addJudgement' 
-        @deleteItem='deleteItem'></Judgement>
-        <!-- 简答题 -->
-        <Answer 
-        :answerQuestion='answerQuestion'
-        @addAnswer='addAnswer' 
-        @deleteItem='deleteItem'></Answer>
-        <div class="mt20">
-        <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
-        <el-checkbox-group v-model="checkList">
+  <div id="fileContent" class="my-container">
+    <p class="mb10" style="color:red;">可拖拽文件进行上传</p>
+    <el-button type="primary" @click="openFile">上传试题</el-button>
+    <el-button type="success" @click="downLoadTemplate">下载试题模板</el-button>
+    <input
+      ref="pathClear"
+      type="file"
+      style="display:none"
+      id="file"
+      @change="upload"
+      accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    >
+    <div class="mt20 flex-row align-items">
+      <h1 style="font-size:20px;">试题类型：</h1>
+      <el-select v-model="questionType" placeholder="请选择试题类型">
+        <el-option label="常识" value="常识"></el-option>
+        <el-option label="交通安全" value="交通安全"></el-option>
+        <el-option label="法律知识" value="法律知识"></el-option>
+        <el-option label="问卷调查" value="问卷调查"></el-option>
+        <el-option label="在线考试" value="在线考试"></el-option>
+        <el-option label="练习题" value="练习题"></el-option>
+        <el-option label="其他" value="其他"></el-option>
+      </el-select>
+    </div>
+    <!-- 单选题 -->
+    <Single :singleQuestion="singleQuestion" @addSingle="addSingle" @deleteItem="deleteItem"></Single>
+    <!-- 多选题 -->
+    <Multiple
+      :multipleQuestion="multipleQuestion"
+      @addMultiple="addMultiple"
+      @deleteItem="deleteItem"
+    ></Multiple>
+    <!-- 判断题 -->
+    <Judgement
+      :judgementQuestion="judgementQuestion"
+      @addJudgement="addJudgement"
+      @deleteItem="deleteItem"
+    ></Judgement>
+    <!-- 简答题 -->
+    <Answer :answerQuestion="answerQuestion" @addAnswer="addAnswer" @deleteItem="deleteItem"></Answer>
+    <div class="mt20">
+      <h1 style="font-size:20px;margin-bottom:20px;">指定人群：</h1>
+      <el-checkbox-group v-model="checkList">
         <el-checkbox label="小学生"></el-checkbox>
         <el-checkbox label="初中生"></el-checkbox>
         <el-checkbox label="高中生"></el-checkbox>
@@ -53,19 +50,20 @@
         <el-checkbox label="游客"></el-checkbox>
         <el-checkbox label="其他"></el-checkbox>
       </el-checkbox-group>
-      </div>
-        <div class="mt20" v-if="!isShow">
-            <el-button type="primary" @click="create">添加</el-button>
-            <el-button type="warning" @click="resetData">重置</el-button>
-        </div>
     </div>
+    <div class="mt20" v-if="!isShow">
+      <el-button type="primary" @click="create">添加</el-button>
+      <el-button type="warning" @click="resetData">重置</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { post,get } from "../util/http.js";
-import {getRandomStr} from '../util/index.js'
+import { post, get } from "../util/http.js";
+import { getRandomStr } from "../util/index.js";
 import storage from "good-storage";
+import img from '../assets/default.png'
 export default {
   data() {
     return {
@@ -77,8 +75,8 @@ export default {
       judgementQuestion: [],
       // 问答题
       answerQuestion: [],
-      checkList:[],
-      questionType:'常识',
+      checkList: [],
+      questionType: "常识",
       isSave: 0
     };
   },
@@ -227,19 +225,19 @@ export default {
         // 发布者id
         params.userId = this.userInfo._id;
 
-        params.questionType = this.questionType
-        params.checkList = JSON.stringify(this.checkList)
+        params.questionType = this.questionType;
+        params.checkList = JSON.stringify(this.checkList);
 
         try {
           const result = await post("/api/questions/addItemBank", params);
           if (result.statusCode == 200) {
-            this.checkList = []
+            this.checkList = [];
             this.$message({
               type: "success",
               message: result.message,
               showClose: true
             });
-            this.resetData()
+            this.resetData();
           } else {
             this.$message({
               type: "warning",
@@ -270,7 +268,7 @@ export default {
     },
     async upload(e) {
       try {
-        let file = e.dataTransfer?e.dataTransfer.files[0]:e.target.files[0];
+        let file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
         let name = file.name;
         let reg = /(\.(xls)|(xlsx))$/i;
         let titleName = name.replace(/(.*\/)*([^.]+).*/gi, "$2");
@@ -318,8 +316,8 @@ export default {
           message: error.toString(),
           showClose: true
         });
-      }finally{
-        this.$refs.pathClear.value =''
+      } finally {
+        this.$refs.pathClear.value = "";
       }
     },
     resetData() {
@@ -327,20 +325,20 @@ export default {
       this.multipleQuestion = [];
       this.judgementQuestion = [];
       this.answerQuestion = [];
-      this.questionType  = '常识'
-      this.checkList = []
-      storage.remove('AddQuestion')
+      this.questionType = "常识";
+      this.checkList = [];
+      storage.remove("AddItemBank");
     },
-    async downLoadTemplate(){
+    async downLoadTemplate() {
       try {
-        let url = '/api/downLoad/downLoadTemplate'
-        window.open(url)
+        let url = "/api/downLoad/downLoadTemplate";
+        window.open(url);
       } catch (error) {
         this.$message({
-            showClose:true,
-            type:'error',
-            message:error.toString()
-          })
+          showClose: true,
+          type: "error",
+          message: error.toString()
+        });
       }
     },
     back(cb) {
@@ -370,27 +368,41 @@ export default {
         })
         .catch(() => {});
     },
-    onDrop(e){
+    onDrop(e) {
       e.preventDefault();
-      this.upload(e)
+      this.upload(e);
     }
   },
   beforeRouteLeave(to, from, next) {
     this.back(() => {
-      const div = document.getElementById("fileContent")
-    div.removeEventListener('drag',this.onDrop)
-        next();
-      });
+      if(this.singleQuestion.length == 0 &&
+        this.multipleQuestion.length == 0 &&
+        this.judgementQuestion.length == 0 &&
+        this.answerQuestion.length == 0){
+           storage.remove("AddItemBank");
+        }
+      const div = document.getElementById("fileContent");
+      div.removeEventListener("drag", this.onDrop);
+      next();
+    });
   },
-  created(){
-    let obj = storage.get('AddItemBank')
-    if(obj){
-      obj.singleQuestion && (this.singleQuestion = obj.singleQuestion)
-    obj.multipleQuestion && (this.multipleQuestion = obj.multipleQuestion)
-    obj.judgementQuestion && (this.judgementQuestion = obj.judgementQuestion)
-    obj.answerQuestion && (this.answerQuestion = obj.answerQuestion)
-    obj.questionType && (this.questionType = obj.questionType)
-    obj.checkList && (this.checkList = obj.checkList)
+  created() {
+    let obj = storage.get("AddItemBank");
+    if (obj) {
+      obj.singleQuestion && (this.singleQuestion = obj.singleQuestion);
+      obj.multipleQuestion && (this.multipleQuestion = obj.multipleQuestion);
+      obj.judgementQuestion && (this.judgementQuestion = obj.judgementQuestion);
+      obj.answerQuestion && (this.answerQuestion = obj.answerQuestion);
+      obj.questionType && (this.questionType = obj.questionType);
+      obj.checkList && (this.checkList = obj.checkList);
+
+      //消息推送
+      var n = new Notification("提示", {
+        body: "自动还原上次自动保存状态",
+        tag: "avenstar", //代表通知的一个识别标签，相同tag时只会打开同一个通知窗口
+        icon: img,
+        requireInteraction: false //通知保持有效不自动关闭，默认为false
+      });
     }
   },
   mounted() {
@@ -401,15 +413,17 @@ export default {
       return false;
     };
     // 释放文件
-    div.addEventListener("drop",this.onDrop);
+    div.addEventListener("drop", this.onDrop);
   },
   computed: {
     ...mapGetters(["userInfo"]),
-    isShow(){
-        return this.singleQuestion.length == 0 &&
+    isShow() {
+      return (
+        this.singleQuestion.length == 0 &&
         this.multipleQuestion.length == 0 &&
         this.judgementQuestion.length == 0 &&
         this.answerQuestion.length == 0
+      );
     }
   },
   watch: {
@@ -437,17 +451,17 @@ export default {
         this.isSave++;
       }
     },
-    checkList:{
+    checkList: {
       deep: true,
       handler: function(newVal) {
         this.isSave++;
       }
     },
-    questionType(){
-      this.isSave++
+    questionType() {
+      this.isSave++;
     },
     isSave() {
-      storage.set('AddItemBank', {
+      storage.set("AddItemBank", {
         singleQuestion: this.singleQuestion,
         multipleQuestion: this.multipleQuestion,
         judgementQuestion: this.judgementQuestion,
@@ -457,7 +471,7 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

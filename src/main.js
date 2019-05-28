@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import img from './assets/default.png'
+
 // pwa
 import './registerServiceWorker'
 
@@ -106,20 +108,39 @@ router.beforeEach((to, from, next) => {
     }
   } else { //用户已经登录了
     let flag = to.meta.flag
-    if(flag){
+    if (flag) {
       let type = to.meta.type
       const index = userInfo.jurisdiction.includes(type)
-      if(index){
+      if (index) {
         next()
-      }else{
+      } else {
         next({
-          name:'notFound'
+          name: 'notFound'
         })
       }
-    }else{
+    } else {
       next()
     }
   }
+})
+
+//注册权限
+Notification.requestPermission(function (status) {
+  // 这将使我们能在 Chrome/Safari 中使用 Notification.permission
+  if (Notification.permission !== status) {
+    Notification.permission = status;
+  }
+});
+
+
+window.addEventListener('offline', function () {
+  //消息推送
+  var n = new Notification('提示', {
+    body: '应用程序处于离线状态',
+    tag: 'avenstar', //代表通知的一个识别标签，相同tag时只会打开同一个通知窗口
+    icon: img,
+    requireInteraction: false //通知保持有效不自动关闭，默认为false
+  })
 })
 
 new Vue({

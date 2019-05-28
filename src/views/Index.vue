@@ -1,5 +1,5 @@
 <template>
-  <div class="index" ref="fullScreen" @fullscreenchange="fullscreenchange">
+  <div class="index">
     <HeadNav 
     :message="message" 
     @fullScreen="fullScreen"></HeadNav>
@@ -28,12 +28,20 @@ export default {
     HeadNav,
     LeftMenu
   },
+  mounted(){
+    this.$nextTick(()=>{
+      document.body.addEventListener('fullscreenchange',this.fullscreenchange)
+    })
+  },
+  beforeDestroy(){
+    document.body.removeEventListener('fullscreenchange',this.fullscreenchange)
+  },
   methods: {
     fullScreen() {
       if (this.isFullScreen) {
         this.exitFullscreen()
       } else {
-        this.launchFullScreen(this.$refs.fullScreen)
+        this.launchFullScreen(document.body)
       }
     },
     exitFullscreen() {

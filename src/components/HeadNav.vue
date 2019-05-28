@@ -24,10 +24,10 @@
                                 <el-dropdown-item command='info'>
                                   <div @click="info">个人信息</div>
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if="userInfo.email.includes('@')" command='editpwd'>
+                                <el-dropdown-item v-if="userInfo.githubId==1" command='editpwd'>
                                   <div @click="updatePwd">修改密码</div>
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if="userInfo.email.includes('@')" command='editname'>
+                                <el-dropdown-item v-if="userInfo.githubId==1" command='editname'>
                                   <div @click="updateName">修改用户名</div>
                                 </el-dropdown-item>
                                 <el-dropdown-item  command='logout'>
