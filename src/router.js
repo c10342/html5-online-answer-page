@@ -27,6 +27,7 @@ import CollectionQuestion from './views/CollectionQuestion.vue'
 import AssembleQuestion from './views/AssembleQuestion.vue'
 import ItemBank from './views/ItemBank.vue'
 import Exercises from './views/Exercises.vue'
+import Reply from './views/Reply.vue'
 
 Vue.use(Router)
 
@@ -116,6 +117,11 @@ export default new Router({
       path: '/answerUserList/:id',
       name: 'answerUserList',
       component: AnswerUserList
+    },
+    {
+      path: '/reply/:id',
+      name: 'reply',
+      component: Reply
     },
     {
       path: '/consultQuestions',

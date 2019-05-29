@@ -2,18 +2,10 @@
     <div class="my-container">
         <div class="flex-row flex-wrap">
             <div class="flex-row flex-center min-width mt10">
-                <span class="text-nowrap pr10 pl10 font18">试卷标题 : </span>
-                <el-input
-                    v-model="title"
-                    placeholder="请输入试卷标题"
-                    clearable>
-                </el-input>
-            </div>
-            <div class="flex-row flex-center min-width mt10">
-                <span class="text-nowrap pr10 pl10 font18">评论内容 : </span>
+                <span class="text-nowrap pr10 pl10 font18">回复内容 : </span>
                 <el-input
                     v-model="content"
-                    placeholder="请输入评论内容"
+                    placeholder="请输入回复内容"
                     clearable>
                 </el-input>
             </div>
@@ -32,40 +24,36 @@
                 </el-date-picker>
             </div>
             <div class="flex-row flex-center ml10 mt10">
-                <el-button type="primary" @click="getCommentList">查询</el-button>
+                <el-button type="primary" @click="getReplyList">查询</el-button>
+                <el-button type="warning" @click="goback">返回</el-button>
             </div>
         </div>
         <div class="mt20">
             <el-table
-                :data="commentList"
+                :data="replyList"
                 style="width: 100%">
                     <el-table-column
                     type="index">
                 </el-table-column>
                 <el-table-column
-                    prop="title"
+                    prop="userName"
                     :show-overflow-tooltip='true'
                     align='center'
-                    label="试卷标题">
+                    label="回复人">
                 </el-table-column>
                 <el-table-column
                     prop="content"
                     :show-overflow-tooltip='true'
                     align='center'
-                    label="评论内容">
+                    label="回复内容">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
                     align='center'
-                    label="评论时间">
+                    label="回复时间">
                     <template slot-scope="scope">
                         <div>{{scope.row.createTime | formatDate}}</div>
                     </template>
-                </el-table-column>
-                <el-table-column align="center" label="操作">
-                  <template slot-scope="scope">
-                    <el-button size="small" type="success" @click="handleReply(scope.$index, scope.row)">查看回复</el-button>
-                  </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -88,23 +76,21 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      commentList: [],
+      replyList: [],
       pageSize: 10,
       currentPage: 1,
       total: 0,
       layout: "total, prev, pager, next,jumper",
       content: "",
-      userName: "",
       beginTime: "",
       endTime: "",
-      title:''
     };
   },
   created() {
-    this.getCommentList();
+    this.getReplyList();
   },
   methods: {
-    async getCommentList() {
+    async getReplyList() {
       try {
         let params = {};
         if (this.beginTime && this.endTime && this.beginTime > this.endTime) {
@@ -124,15 +110,13 @@ export default {
         if (this.content) {
           params.content = this.content;
         }
-        if(this.title){
-          params.title = this.title
-        }
+        let { id } = this.$route.params
         params.pageSize = this.pageSize;
         params.currentPage = this.currentPage;
-        params.id = this.userInfo._id;
-        const result = await get("/api/comment/getUserComment", params);
+        params.commentId = id;
+        const result = await get("/api/comment/getReplyList", params);
         if (result.statusCode == 200) {
-          this.commentList = result.data.commentList;
+          this.replyList = result.data.replyList;
           this.total = result.data.total;
         } else {
           this.$message({
@@ -151,15 +135,10 @@ export default {
     },
     handleCurrentChange(e) {
       this.currentPage = e;
-      this.getCommentList();
+      this.getReplyList();
     },
-    handleReply(index,row){
-      this.$router.push({
-        name:'reply',
-        params:{
-          id:row._id
-        }
-      })
+    goback(){
+        this.$router.back()
     }
   },
   computed: {
@@ -171,8 +150,6 @@ export default {
 <style lang="less" scoped>
 .my-container {
   padding: 20px;
-  // position: relative;
-  // height: calc(100% - 71px);
 }
 .min-width {
   min-width: 300px;
@@ -181,10 +158,6 @@ export default {
   white-space: nowrap;
 }
 .my-pagination {
-  // position: absolute;
-  // bottom: 50px;
-  // left: 0;
-  // width: 100%;
   margin: 30px 0;
 }
 </style>
