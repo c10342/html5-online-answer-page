@@ -24,6 +24,7 @@
 <script>
 import { post } from "../util/http.js";
 import { mapGetters, mapMutations } from "vuex";
+import cookie from 'js-cookie'
 export default {
   data() {
     var validatePass2 = (rule, value, callback) => {
@@ -135,7 +136,7 @@ export default {
 <style lang="less" scoped>
 .form {
   margin-top: 20px;
-  background-color: #fff;
+  // background-color: #fff;
   padding: 20px 40px 20px 20px;
   border-radius: 5px;
   box-shadow: 0px 5px 10px #cccc;
