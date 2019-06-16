@@ -141,7 +141,7 @@
               <div>{{scope.row.createTime | formatDate}}</div>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" label="操作" width="200">
             <template slot-scope="scope">
               <el-button
                 v-if="userInfo._id == scope.row.userId"

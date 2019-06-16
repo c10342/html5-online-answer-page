@@ -26,7 +26,7 @@
       </div>
       <div class="flex-row flex-center min-width mt10">
         <span class="text-nowrap pr10 pl10 font18">身份 :</span>
-        <el-select v-model="identity" placeholder="请选择身份">
+        <el-select clearable v-model="identity" placeholder="请选择身份">
           <el-option label="小学生" value="小学生"></el-option>
           <el-option label="初中生" value="初中生"></el-option>
           <el-option label="高中生" value="高中生"></el-option>

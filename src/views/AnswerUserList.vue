@@ -45,7 +45,7 @@
                 style="width: 100%">
                 <el-table-column
                     type="index"
-                    width="20">
+                    width="40">
                 </el-table-column>
                 <el-table-column
                     prop="title"
@@ -108,6 +108,7 @@
                     label="答题者">
                 </el-table-column>
                 <el-table-column
+                width="100"
                     prop="createTime"
                     align='center'
                     label="填写时间">
@@ -116,11 +117,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                width="100"
                     prop="answerTime"
                     align='center'
                     label="完成时间">
                 </el-table-column>
-                <el-table-column label="操作" align='center' width="200">
+                <el-table-column label="操作" align='center' width="100">
                     <template slot-scope="scope">
                         <el-button
                         type="primary"

@@ -60,7 +60,7 @@
                 style="width: 100%">
                 <el-table-column
                     type="index"
-                    width="20">
+                    width="40">
                 </el-table-column>
                 <el-table-column
                     prop="title"
@@ -117,14 +117,15 @@
                         <div>{{scope.row.correctPercent | numToPercent}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     prop="userName"
                     align='center'
                     label="发布者">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="createTime"
                     align='center'
+                     width="100"
                     label="填写时间">
                     <template slot-scope="scope">
                         <div>{{scope.row.createTime | formatDate}}</div>
@@ -133,9 +134,10 @@
                 <el-table-column
                     prop="answerTime"
                     align='center'
+                     width="100"
                     label="完成时间">
                 </el-table-column>
-                <el-table-column label="操作" align='center' width="200">
+                <el-table-column label="操作" align='center' width="180">
                     <template slot-scope="scope">
                         <el-button
                         size="small"

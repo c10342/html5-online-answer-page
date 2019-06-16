@@ -42,7 +42,7 @@
                 style="width: 100%">
                 <el-table-column
                     type="index"
-                    width="20">
+                    width="40">
                 </el-table-column>
                 <el-table-column
                     prop="title"
@@ -116,7 +116,7 @@
                 style="width: 100%">
                 <el-table-column
                     type="index"
-                    width="20">
+                    width="40">
                 </el-table-column>
                 <el-table-column
                     prop="title"
